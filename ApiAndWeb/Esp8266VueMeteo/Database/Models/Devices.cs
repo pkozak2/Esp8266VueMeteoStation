@@ -7,6 +7,7 @@ namespace Esp8266VueMeteo.Database.Models
     {
         public Devices()
         {
+            DeviceId = Guid.NewGuid();
             IsActive = true;
         }
         [Key]
