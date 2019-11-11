@@ -6,10 +6,10 @@
 
 // Nazwa sieci Wi-Fi 2,4 GHz (SSID).
 // Uwaga! Wemos D1 Pro nie połączy się z siecią 5 GHz.
-const char *WIFI_SSID = "KozackiDwor";
+const char *WIFI_SSID = "Kozacki";
 
 // Hasło do sieci Wi-Fi
-const char *WIFI_PASSWORD = "uAe34cXC";
+const char *WIFI_PASSWORD = "uC";
 
 // *******************************************************
 // ****************** USTAWIENIA STACJI ******************
