@@ -6,6 +6,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using VueCliMiddleware;
 using Esp8266VueMeteo.Database;
+using Esp8266VueMeteo.Services;
+using Esp8266VueMeteo.Repositories;
 
 namespace VueStartingProject
 {
@@ -21,7 +23,7 @@ namespace VueStartingProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson();
 
             // In production, the Vue files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -30,6 +32,13 @@ namespace VueStartingProject
             });
             services.AddDbContext<MeteoDbContext>(options =>
               options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddTransient<IDevicesService, DevicesService>();
+            services.AddTransient<IMeasurementsService, MeasurementsService>();
+
+            services.AddTransient<IDevicesRepository, DevicesRepository>();
+            services.AddTransient<IMeasurementsRepository, MeasurementsRepository>();
+            services.AddTransient<IJsonUpdatesRepository, JsonUpdatesRepository>();
 
         }
 

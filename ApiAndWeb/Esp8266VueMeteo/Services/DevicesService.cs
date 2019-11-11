@@ -1,29 +1,27 @@
-using Esp8266VueMeteo.Models;
 using Esp8266VueMeteo.Repositories;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Esp8266VueMeteo.Services
 {
     public interface IDevicesService
     {
-        bool AuthorizeSensor(string deviceId, string httpContextUserName, string httpContextPassword);
+        Guid? AuthorizeSensor(string deviceId, string httpContextUserName, string httpContextPassword);
     }
     public class DevicesService : IDevicesService
     {
+        private readonly ILogger _logger;
         private readonly IDevicesRepository _devicessRepository;
-        public DevicesService(IDevicesRepository devicesRepository)
+        public DevicesService(IDevicesRepository devicesRepository, ILogger<DevicesService> logger)
         {
+            _logger = logger;
             _devicessRepository = devicesRepository;
         }
-        public bool AuthorizeSensor(string deviceId, string httpContextUserName, string httpContextPassword);
+        public Guid? AuthorizeSensor(string deviceId, string httpContextUserName, string httpContextPassword)
         {
-            //TODO: All data and save
-
-            //_measurementsRepository.AddSensorMeasurement(deviceId, null, null, null, null, null, null, null);
-            return true;
+            _logger.LogInformation($"Authorize sensor: {deviceId}");
+            return _devicessRepository.GetDevicesByEspId(deviceId).Where(w => w.HttpUserName == httpContextUserName && w.HttpPassword == httpContextPassword).FirstOrDefault()?.DeviceId;
         }
     }
 }

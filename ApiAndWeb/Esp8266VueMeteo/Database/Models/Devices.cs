@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 
 namespace Esp8266VueMeteo.Database.Models
 {
@@ -18,9 +20,9 @@ namespace Esp8266VueMeteo.Database.Models
         public Guid DeviceId { get; set; }
         [Required]
         public string Esp8266Id { get; set; }
-        [MaxLength(256)]
+        [Required, MaxLength(256)]
         public string HttpUserName { get; set; }
-        [MaxLength(256)]
+        [Required, MaxLength(256)]
         public string HttpPassword { get; set; }
         [Required, MaxLength(256)]
         public string DeviceName { get; set; }
@@ -37,6 +39,8 @@ namespace Esp8266VueMeteo.Database.Models
         public DateTimeOffset InsertDateTime { get; set; }
         public bool IsActive { get; set; }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public ICollection<Measurements> Measurements { get; set; }
     }
 }

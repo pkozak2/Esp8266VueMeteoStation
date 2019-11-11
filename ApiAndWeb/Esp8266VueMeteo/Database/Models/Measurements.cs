@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace Esp8266VueMeteo.Database.Models
 {
@@ -28,6 +26,8 @@ namespace Esp8266VueMeteo.Database.Models
         public double? HeaterTemperature { get; set; }
         public double? HeaterHumidity { get; set; }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public Devices Device { get; set; }
     }
 }

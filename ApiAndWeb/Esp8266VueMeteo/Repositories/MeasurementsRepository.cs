@@ -1,9 +1,7 @@
 ﻿using Esp8266VueMeteo.Database;
 using Esp8266VueMeteo.Database.Models;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Esp8266VueMeteo.Repositories
 {
@@ -13,28 +11,41 @@ namespace Esp8266VueMeteo.Repositories
     }
     public class MeasurementsRepository : IMeasurementsRepository
     {
+        private readonly ILogger _logger;
         private readonly MeteoDbContext _context;
-        public MeasurementsRepository(MeteoDbContext context)
+        private readonly IJsonUpdatesRepository _jsonUpdatesRepository;
+        public MeasurementsRepository(MeteoDbContext context, IJsonUpdatesRepository jsonUpdatesRepository, ILogger<MeasurementsRepository> logger)
         {
+            _logger = logger;
             _context = context;
+            _jsonUpdatesRepository = jsonUpdatesRepository;
         }
 
-        public bool AddSensorMeasurement(Guid deviceId , double? pm25, double? pm10, double? temperature, double? humidity, double? pressure, double? heaterTemperature, double? heaterHumidity)
+        public bool AddSensorMeasurement(Guid deviceId, double? pm25, double? pm10, double? temperature, double? humidity, double? pressure, double? heaterTemperature, double? heaterHumidity)
         {
-            var measurement = new Measurements()
+            _logger.LogInformation($"In Add sensor measurement for device id: {deviceId}");
+            try
             {
-                DeviceId = deviceId,
-                Pm25 = pm25,
-                Pm10 = pm10,
-                HeaterHumidity = heaterHumidity,
-                HeaterTemperature = heaterTemperature,
-                Humidity = humidity,
-                InsertDateTime = DateTimeOffset.Now,
-                Pressure = pressure,
-                Temperature = temperature
-            };
-            _context.Measurements.Add(measurement);
-            return _context.SaveChanges() >= 1;
+                var measurement = new Measurements()
+                {
+                    DeviceId = deviceId,
+                    Pm25 = pm25,
+                    Pm10 = pm10,
+                    HeaterHumidity = heaterHumidity,
+                    HeaterTemperature = heaterTemperature,
+                    Humidity = humidity,
+                    InsertDateTime = DateTimeOffset.Now,
+                    Pressure = pressure,
+                    Temperature = temperature
+                };
+                _context.Measurements.Add(measurement);
+                _jsonUpdatesRepository.SaveUpdate(deviceId, measurement);
+                return _context.SaveChanges() >= 1;
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex, "Error when saving measurement data!");
+                return false;
+            }
         }
     }
 }
