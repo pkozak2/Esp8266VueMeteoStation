@@ -1,4 +1,5 @@
-﻿using Esp8266VueMeteo.Models;
+﻿using Esp8266VueMeteo.Database.Models;
+using Esp8266VueMeteo.Models;
 using Esp8266VueMeteo.Repositories;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace Esp8266VueMeteo.Services
                 if (propertyInfo != null)
                 {
                     Type t = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
-                    var safeValue = (d.Value == null) ? null : Convert.ChangeType(d.Value, t);
+                    var safeValue = (d.Value == null) ? null : Convert.ChangeType(d.Value.Replace(".",","), t);
                     propertyInfo.SetValue(measurement, safeValue, null);
                 }
             }
