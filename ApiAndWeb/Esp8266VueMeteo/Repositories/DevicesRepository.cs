@@ -8,7 +8,7 @@ namespace Esp8266VueMeteo.Repositories
 {
     public interface IDevicesRepository
     {
-        bool AuthorizeByEspId(string espId);
+        List<Devices> AuthorizeByEspId(string espId);
     }
     public class DevicesRepository : IDevicesRepository
     {
@@ -18,9 +18,9 @@ namespace Esp8266VueMeteo.Repositories
             _context = context;
         }
 
-        public bool AuthorizeByEspId(string espId)
+        public List<Devices> AuthorizeByEspId(string espId)
         {
-            return _context.Devices.Any(d => espId.Contains(d.Esp8266Id) && d.IsActive);
+            return _context.Devices.Where(d => espId.Contains(d.Esp8266Id) && d.IsActive).ToList();
         }
     }
 }
