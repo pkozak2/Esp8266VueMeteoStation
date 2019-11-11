@@ -38,8 +38,8 @@ namespace Esp8266VueMeteo.Repositories
                     Pressure = pressure,
                     Temperature = temperature
                 };
-                _context.Measurements.Add(measurement);
                 _jsonUpdatesRepository.SaveUpdate(deviceId, measurement);
+                _context.Measurements.Add(measurement);
                 return _context.SaveChanges() >= 1;
             }
             catch (Exception ex) {
