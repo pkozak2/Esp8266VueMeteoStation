@@ -213,7 +213,7 @@ String readSensorsData()
   String data = "";
   data = readTemperature();
   data += readWifiRssi();
-  data += readCellVoltage();
+  //data += readCellVoltage();
 
   return data;
 }
@@ -317,7 +317,7 @@ void printToApi(String dataJson)
   String data = FPSTR(data_first_part);
   data.replace("{v}", String(esp_chipid));
 
-  data += readTemperature();
+  data += dataJson;
   data += "]}";
 
   sendData(data);
