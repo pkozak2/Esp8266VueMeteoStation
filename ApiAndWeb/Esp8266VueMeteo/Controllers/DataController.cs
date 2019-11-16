@@ -25,13 +25,13 @@ namespace VueStartingProject.Controllers
            return new JsonResult(_devicesService.GetAllDevices());
         }
 
-        [HttpGet("measurements/all/current")]
+        [HttpGet("measurements/all")]
         public IActionResult GetCurrentMeasurementsForDevices()
         {
             return new JsonResult(_measurementsService.GetAllCurrentMeasurements());
         }
 
-        [HttpGet("measurements/{deviceId}/current")]
+        [HttpGet("measurements/{deviceId}")]
         public IActionResult GetCurrentMeasurementsForDevice(Guid deviceId)
         {
             return new JsonResult(_measurementsService.CurrentMeasurementsForDevice(deviceId));
