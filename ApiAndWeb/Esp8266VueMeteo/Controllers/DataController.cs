@@ -1,9 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Esp8266VueMeteo.Models;
-using Esp8266VueMeteo.Models.ApiModels;
 using Esp8266VueMeteo.Services;
 using Microsoft.AspNetCore.Mvc;
 
