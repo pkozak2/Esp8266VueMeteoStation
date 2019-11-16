@@ -9,6 +9,7 @@ namespace Esp8266VueMeteo.Repositories
 {
     public interface IDevicesRepository
     {
+        List<Devices> GetAllActiveDevices();
         List<Devices> GetDevicesByEspId(string espId);
     }
     public class DevicesRepository : IDevicesRepository
@@ -19,6 +20,19 @@ namespace Esp8266VueMeteo.Repositories
         {
             _logger = logger;
             _context = context;
+        }
+
+        public List<Devices> GetAllActiveDevices()
+        {
+            try
+            {
+                return _context.Devices.Where(w => w.IsActive).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error when GetAllActiveDevices");
+                return new List<Devices>();
+            }
         }
 
         public List<Devices> GetDevicesByEspId(string espId)

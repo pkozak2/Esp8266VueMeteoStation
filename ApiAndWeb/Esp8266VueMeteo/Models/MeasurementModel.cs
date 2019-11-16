@@ -16,6 +16,8 @@ namespace Esp8266VueMeteo.Models
         public double? HeaterHumidity { get; set; }
         public double? GpsTime { get; set; }
         public double? GpsDate { get; set; }
+        public double? WifiRssi { get; set; }
+        public double? CellVoltage { get; set; }
 
     }
 }

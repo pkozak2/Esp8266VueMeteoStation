@@ -25,6 +25,8 @@ namespace Esp8266VueMeteo.Database.Models
         public double? Pressure { get; set; }
         public double? HeaterTemperature { get; set; }
         public double? HeaterHumidity { get; set; }
+        public double? WifiRssi { get; set; }
+        public double? CellVoltage { get; set; }
 
         [JsonIgnore]
         [IgnoreDataMember]

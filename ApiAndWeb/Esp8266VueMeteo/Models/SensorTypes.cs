@@ -14,8 +14,11 @@ namespace Esp8266VueMeteo.Models
             {"Pressure", new List<string>{"BME280_pressure", "BMP_pressure"} },
             {"HeaterTemperature", new List<string>{ "temperature", "HECA_temperature" } },
             {"HeaterHumidity", new List<string>{ "humidity", "HECA_humidity" } },
-            //{"GpsTime", new List<string>{"GPS_time"} },
-            //{"GpsDate", new List<string>{"GPS_date"} },
+            {"GpsTime", new List<string>{"GPS_time"} },
+            {"GpsDate", new List<string>{"GPS_date"} },
+            {"WifiRssi", new List<string>{ "wifi_rssi" } },
+            {"CellVoltage", new List<string>{ "cell_voltage" } },
+
         };
     }
 }
