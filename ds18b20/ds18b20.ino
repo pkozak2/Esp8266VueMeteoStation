@@ -95,10 +95,10 @@ const char data_first_part[] PROGMEM = "{\"esp8266id\": \"{v}\", \"sensordataval
 
 void setup()
 {
-  esp_chipid = String(ESP.getChipId());
-
   Serial.begin(115200);
-  pinMode(LED_BUILTIN, OUTPUT);
+
+  esp_chipid = String(ESP.getChipId());
+  // pinMode(LED_BUILTIN, OUTPUT);
 
   Serial.println("ChipId:");
   Serial.println(String(esp_chipid));
@@ -109,9 +109,9 @@ void setup()
 
   create_basic_auth_strings();
 
-  String tempData = readTemperature();
-  printToSerialPort(tempData);
-  printToApi(tempData);
+  String sensorsData = readSensorsData();
+  printToSerialPort(sensorsData);
+  printToApi(sensorsData);
 
   // all done, now go to sleep
   blinkLED(3); // notify the user
@@ -208,18 +208,64 @@ void logonToRouter()
   Serial.println(WiFi.localIP().toString()); // is toString necessary?
 } // logonToRouter
 
+String readSensorsData()
+{
+  String data = "";
+  data = readTemperature();
+  data += readWifiRssi();
+  data += readCellVoltage();
+
+  return data;
+}
+
 // *******************************************************
 // ******** READ DS18B20 into string              ********
 // *******************************************************
 String readTemperature()
 {
-  sensors.requestTemperatures();
+
   for (int i = 0; i <= 3; i++)
   {
+    sensors.requestTemperatures();
     tempSensor1 = sensors.getTempC(sensor1); // Gets the values of the temperature
+    delay(50);                               // Provide some delay to let sensor settle
   }
 
   return Value2Json(F("DS18B20_temperature"), Float2String(tempSensor1));
+}
+
+// *******************************************************
+// ******** READ WIFI RSSI into string            ********
+// *******************************************************
+String readWifiRssi()
+{
+  long ssi = 0;
+  for (int i = 0; i <= 3; i++)
+  {
+    ssi = WiFi.RSSI(); // Gets the values of the rssi
+    delay(50);         // Provide some delay to let sensor settle
+  }
+
+  return Value2Json(F("wifi_rssi"), Float2String(ssi));
+}
+
+// *******************************************************
+// ******** READ Cell voltage into string            ********
+// *******************************************************
+String readCellVoltage()
+{
+  float fudgeFactor = dmmVoltage / adcVoltage;
+  long cv = 0;
+  for (int i = 0; i <= 3; i++)
+  {
+    // read analog voltage from the Analog to Digital Converter
+    // on D1 Mini this is 0 - 1023 for voltages 0 to 3.2V
+    // the D1M-WX1 has an external resistor to extend the range to 5.0 Volts
+    cv = 5.0 * analogRead(A0) * fudgeFactor / 1023.0;
+    delay(50); // Provide some delay to let sensor settle
+  }
+
+  return Value2Json(F("cell_voltage"), Float2String(cv));
 }
 
 // *******************************************************
@@ -245,10 +291,10 @@ void blinkLED(int flashes)
   // set LED_BUILTIN pin to Output mode in setup()
   for (int i = 0; i < flashes; i++)
   {
-    digitalWrite(LED_BUILTIN, LOW);  // Turn the LED *ON*
-    delay(20);                       // short flash for low energy consumption
-    digitalWrite(LED_BUILTIN, HIGH); // Turn the LED *OFF*
-    delay(250);                      // time between flashes
+    //digitalWrite(LED_BUILTIN, LOW);  // Turn the LED *ON*
+    //delay(20);                       // short flash for low energy consumption
+    //digitalWrite(LED_BUILTIN, HIGH); // Turn the LED *OFF*
+    //delay(250);                      // time between flashes
   }
 } // blinkLED()
 
