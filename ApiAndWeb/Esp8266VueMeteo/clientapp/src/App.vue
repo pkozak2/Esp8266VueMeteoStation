@@ -1,13 +1,12 @@
 <template>
-  <v-app>
-    <v-content>
-      <router-view/>
-    </v-content>
-  </v-app>
+  <main>
+    <transition mode="out-in">
+      <router-view />
+    </transition>
+  </main>
 </template>
 
 <script>
-
 export default {
   name: "App",
 
