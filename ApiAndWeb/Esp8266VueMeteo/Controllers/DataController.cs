@@ -37,5 +37,11 @@ namespace VueStartingProject.Controllers
         {
             return new JsonResult(_measurementsService.MeasurementsForDeviceFromHours(deviceId, hours));
         }
+
+        [HttpGet("measurements/{deviceId}/data.json")]
+        public IActionResult GetCurrentDataJson(Guid deviceId)
+        {
+            return new JsonResult(_measurementsService.GetCurrentDataJson(deviceId));
+        }
     }
 }
