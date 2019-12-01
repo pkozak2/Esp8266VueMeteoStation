@@ -15,18 +15,17 @@ namespace Esp8266VueMeteo.Services
         List<Measurements> GetAllMeasurements();
         bool AddSensorMeasurement(Guid deviceId, IList<SensorData> data);
         SensorMeasurementModel CurrentMeasurementsForDevice(Guid deviceId);
-        List<SensorsCurrentMeasurements> GetAllCurrentMeasurements();
         List<SensorMeasurementModel> MeasurementsForDeviceFromHours(Guid deviceId, int hours);
         DataJsonModel GetCurrentDataJson(Guid deviceId);
     }
     public class MeasurementsService : IMeasurementsService
     {
         private readonly IMeasurementsRepository _measurementsRepository;
-        private readonly IDevicesService _devicesService;
-        public MeasurementsService(IMeasurementsRepository measurementsRepository, IDevicesService devicesService)
+        private readonly IDevicesRepository _devicesReporistory;
+        public MeasurementsService(IMeasurementsRepository measurementsRepository, IDevicesRepository devicesRepository)
         {
+            _devicesReporistory = devicesRepository;
             _measurementsRepository = measurementsRepository;
-            _devicesService = devicesService;
         }
         public bool AddSensorMeasurement(Guid deviceId, IList<SensorData> data)
         {
@@ -72,23 +71,6 @@ namespace Esp8266VueMeteo.Services
                 WifiRssi = data.WifiRssi,
                 InsertDate = data.InsertDateTime
             };
-        }
-
-        public List<SensorsCurrentMeasurements> GetAllCurrentMeasurements()
-        {
-            var result = new List<SensorsCurrentMeasurements>();
-            var devices = _devicesService.GetAllDevices();
-            foreach(var device in devices)
-            {
-                var data = new SensorsCurrentMeasurements();
-                data.Sensor = device;
-                var measurements = CurrentMeasurementsForDevice(device.SensorId);
-                if (measurements == null) continue;
-                data.Measurements = measurements;
-
-                result.Add(data);
-            }
-            return result;
         }
 
         public List<Measurements> GetAllMeasurements()

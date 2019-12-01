@@ -3,11 +3,11 @@
     <v-card slot="offset" :class="`elevation-${elevation}`" :color="color" class="pa-4" dark>
       <v-icon size="40">{{ icon }}</v-icon>
     </v-card>
-    <div class="text-sm-right">
+    <div class="text-right" pt-4>
       <p class="category font-weight-light" v-text="title" />
       <h3 class="title display-1 font-weight-light">
         {{ value }}
-        <small>{{ smallValue }}</small>
+        <small v-html="smallValue"></small>
       </h3>
     </div>
     <template slot="actions">
@@ -48,7 +48,7 @@ export default {
       default: undefined
     },
     value: {
-      type: String,
+      type: [String, Number],
       default: undefined
     },
     smallValue: {

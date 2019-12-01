@@ -20,10 +20,10 @@ namespace VueStartingProject.Controllers
            return new JsonResult(_devicesService.GetAllDevices());
         }
 
-        [HttpGet("measurements/all")]
-        public IActionResult GetCurrentMeasurementsForDevices()
+        [HttpGet("sensors/{userName}")]
+        public IActionResult GetUserSensors(string userName)
         {
-            return new JsonResult(_measurementsService.GetAllCurrentMeasurements());
+            return new JsonResult(_devicesService.GetUserDevices());
         }
 
         [HttpGet("measurements/{deviceId}")]

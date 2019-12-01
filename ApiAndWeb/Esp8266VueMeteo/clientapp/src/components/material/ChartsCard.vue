@@ -1,6 +1,6 @@
 <template>
   <BaseCard v-bind="$attrs" class="v-card--material-chart" v-on="$listeners">
-    <v-card slot="header" :class="`elevation-${elevation}`" :color="color" class="pa-4" dark>
+    <v-card slot="header" class="pa-4" dark>
       <v-icon size="40">fa-cat</v-icon>
     </v-card>
     <!-- <chartist
