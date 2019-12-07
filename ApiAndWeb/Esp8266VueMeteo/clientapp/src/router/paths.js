@@ -47,7 +47,8 @@ export default [
       name: "Dashboard View",
       requiresAuth: false
     },
-    component: () => import(`@/views/DashboardView.vue`),
+    // component: () => import(`@/views/DashboardView.vue`),
+    component: () => import(`@/views/DefaultView.vue`),
     children: [
       {
         path: "",
