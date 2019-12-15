@@ -58,6 +58,15 @@
               smallValue="dBm"
             />
           </v-col>
+          <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.pressureHpa">
+            <StatsCard
+              color="red"
+              icon="fa-tachometer-alt"
+              title="Ciśnienie"
+              :value="sensor.measurements.pressureHpa"
+              smallValue="hPa"
+            />
+          </v-col>
         </v-row>
         <v-row :v-if="IsGraphsDataContainsDevice(sensor.sensorId)">
           <v-col cols="12">
@@ -68,7 +77,7 @@
               </v-btn-toggle>
             </v-row>
             <v-row justify="center">
-              <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2>
+              <v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
                 <ChartsCard
                   :chartData="GetChartData(sensor.sensorId, 'temperature', 'Temperatura (°C)')"
                   :options="chartOptions"
@@ -84,12 +93,23 @@
                   </template>-->
                 </ChartsCard>
               </v-col>
-              <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2>
+              <v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
                 <ChartsCard
                   :chartData="GetChartData(sensor.sensorId, 'wifiRssi', 'WiFi RSSI')"
                   :options="chartOptions"
                 >
                   <h3 class="title font-weight-light">WiFi RSSI</h3>
+                  <p
+                    class="category d-inline-flex font-weight-light"
+                  >Z ostatnich {{sensorHistoryHours}} godzin</p>
+                </ChartsCard>
+              </v-col>
+              <v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
+                <ChartsCard
+                  :chartData="GetChartData(sensor.sensorId, 'pressureHpa', 'Ciśnienie hPa')"
+                  :options="chartOptions"
+                >
+                  <h3 class="title font-weight-light">Ciśnienie hPa</h3>
                   <p
                     class="category d-inline-flex font-weight-light"
                   >Z ostatnich {{sensorHistoryHours}} godzin</p>
