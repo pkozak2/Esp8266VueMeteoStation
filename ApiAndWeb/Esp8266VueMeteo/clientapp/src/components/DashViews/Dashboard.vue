@@ -22,7 +22,7 @@
               smallValue="&deg;C"
             />
           </v-col>
-          <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.temperatureF">
+          <!-- <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.temperatureF">
             <StatsCard
               color="green"
               icon="fa-temperature-low"
@@ -30,7 +30,7 @@
               :value="sensor.measurements.temperatureF"
               smallValue="&deg;F"
             />
-          </v-col>
+          </v-col>-->
           <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.pm25">
             <StatsCard
               color="red"
@@ -65,6 +65,15 @@
               title="Ciśnienie"
               :value="sensor.measurements.pressureHpa"
               smallValue="hPa"
+            />
+          </v-col>
+          <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.humidity">
+            <StatsCard
+              color="orange"
+              icon="fa-percent"
+              title="Wilgotność"
+              :value="sensor.measurements.humidity"
+              smallValue="%"
             />
           </v-col>
         </v-row>
@@ -110,6 +119,17 @@
                   :options="chartOptions"
                 >
                   <h3 class="title font-weight-light">Ciśnienie hPa</h3>
+                  <p
+                    class="category d-inline-flex font-weight-light"
+                  >Z ostatnich {{sensorHistoryHours}} godzin</p>
+                </ChartsCard>
+              </v-col>
+              <v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
+                <ChartsCard
+                  :chartData="GetChartData(sensor.sensorId, 'humidity', 'Wilgotność')"
+                  :options="chartOptions"
+                >
+                  <h3 class="title font-weight-light">Wilgotność</h3>
                   <p
                     class="category d-inline-flex font-weight-light"
                   >Z ostatnich {{sensorHistoryHours}} godzin</p>
