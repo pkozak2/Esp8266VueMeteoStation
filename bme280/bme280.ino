@@ -1,10 +1,25 @@
 #include <ESP8266WebServer.h>
+#include <Wire.h>
+#include <SPI.h>
+#include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 #include <base64.h>
 
 #include "config.h"
 
-Adafruit_BME280 bme280;
+// assign the ESP8266 pins to arduino pins
+#define D1 5
+#define D2 4
+#define D4 2
+#define D3 0
+
+// assign the SPI bus to pins
+#define BME_SCK D1
+#define BME_MISO D4
+#define BME_MOSI D2
+#define BME_CS D3
+
+Adafruit_BME280 bme280(BME_CS, BME_MOSI, BME_MISO, BME_SCK); // software SPI
 
 bool bme280_init_failed = false;
 double last_value_BME280_T = -128.0;
@@ -29,7 +44,7 @@ void setup()
     create_basic_auth_strings();
 
     debug_out(F("Read BME280..."), 1);
-    if (!initBME280(0x76) && !initBME280(0x77))
+    if (!initBME280())
     {
         debug_out(F("Check BME280 wiring"), 1);
         bme280_init_failed = 1;
@@ -152,20 +167,12 @@ String readSensorsData()
 /*****************************************************************
  * Init BME280                                                   *
  *****************************************************************/
-bool initBME280(char addr)
+bool initBME280()
 {
-    debug_out(F("Trying BME280 sensor on "), 0);
-    debug_out(String(addr, HEX), 0);
 
-    if (bme280.begin(addr))
+    if (bme280.begin())
     {
         debug_out(F(" ... found"), 1);
-        bme280.setSampling(
-            Adafruit_BME280::MODE_FORCED,
-            Adafruit_BME280::SAMPLING_X1,
-            Adafruit_BME280::SAMPLING_X1,
-            Adafruit_BME280::SAMPLING_X1,
-            Adafruit_BME280::FILTER_OFF);
         return true;
     }
     else

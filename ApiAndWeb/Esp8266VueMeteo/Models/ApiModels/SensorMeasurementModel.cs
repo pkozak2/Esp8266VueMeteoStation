@@ -22,7 +22,7 @@ namespace Esp8266VueMeteo.Models.ApiModels
                 if (Pressure.HasValue)
                 {
                     var pressurehPa = (decimal)Pressure.Value / 100;
-                    return (double?)Math.Round(pressurehPa, 0);
+                    return (double?)Math.Round(pressurehPa, 2);
                 } return null;
             }
         }
