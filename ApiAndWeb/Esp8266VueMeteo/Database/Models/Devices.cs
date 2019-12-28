@@ -35,6 +35,7 @@ namespace Esp8266VueMeteo.Database.Models
         public double? Latitude { get; set; }
         public double? Longtitude { get; set; }
         public int? Radius { get; set; }
+        public int? Elevation { get; set; }
         [Required]
         public DateTimeOffset InsertDateTime { get; set; }
         public bool IsActive { get; set; }
