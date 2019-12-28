@@ -210,7 +210,9 @@ export default {
   },
   methods: {
     GetDateFromDateTimeOffset(data) {
-      return moment(data).format("DD-MM-YYYY HH:mm:ss");
+      return data === null
+        ? "Brak"
+        : moment(data).format("DD-MM-YYYY HH:mm:ss");
     },
     GetSensorHistoryFromHours(deviceId) {
       measurementsService
@@ -244,28 +246,31 @@ export default {
       });
       if (index == -1) return;
 
-      var data1 = this.graphsData[index].data.map(function(val) {
-        return val[chartType];
-      });
+      var data = this.graphsData[index].data;
+      var chartData = [];
+      var hours = [];
+      if (data != null) {
+        chartData = data.map(function(val) {
+          return val[chartType];
+        });
 
-      var hours = this.graphsData[index].data.map(function(val) {
-        return val["insertDate"];
-      });
-
-      var chartData = {
+        hours = data.map(function(val) {
+          return val["insertDate"];
+        });
+      }
+      var chart = {
         labels: hours,
         datasets: [
           {
-            label: title, //"Temperatura (°C)",
+            label: title,
             backgroundColor: "#f87979",
-            data: data1,
+            data: chartData,
             fill: false,
             borderColor: "#f87979"
           }
         ]
       };
-
-      return chartData;
+      return chart;
     }
   },
   watch: {

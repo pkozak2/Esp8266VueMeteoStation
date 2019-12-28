@@ -47,7 +47,7 @@ namespace Esp8266VueMeteo.Services
                     SensorDescription = s.Description,
                     SensorDescritionExtra = s.ExtraDescription,
                     SensorName = s.DeviceName,
-                    Measurements = new SensorMeasurementModel() {
+                    Measurements = data == null ? new SensorMeasurementModel() : new SensorMeasurementModel() {
                         CellVoltage = data.CellVoltage,
                         HeaterHumidity = data.HeaterHumidity,
                         HeaterTemperature = data.HeaterTemperature,

@@ -87,7 +87,7 @@ namespace Esp8266VueMeteo.Services
             {
                 result.Last_data = new LastDataJsonModel
                 {
-                    LastUpdate = (int)current.InsertDate.UtcDateTime.Subtract(DateTime.UnixEpoch).TotalSeconds,
+                    LastUpdate = (int)current.InsertDate.Value.UtcDateTime.Subtract(DateTime.UnixEpoch).TotalSeconds,
                     HeaterHumidity = current.HeaterHumidity,
                     HeaterTemperature = current.HeaterTemperature,
                     Humidity = current.Humidity,

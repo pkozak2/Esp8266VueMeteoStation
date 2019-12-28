@@ -4,7 +4,7 @@ namespace Esp8266VueMeteo.Models.ApiModels
 {
     public class SensorMeasurementModel : MeasurementModel
     {
-        public DateTimeOffset InsertDate { get; set; }
+        public DateTimeOffset? InsertDate { get; set; }
         public int? TemperatureF
         {
             get

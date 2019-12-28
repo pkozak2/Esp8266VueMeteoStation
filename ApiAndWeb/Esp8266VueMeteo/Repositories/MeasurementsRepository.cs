@@ -75,7 +75,7 @@ namespace Esp8266VueMeteo.Repositories
             try
             {
                 var minDate = DateTimeOffset.Now.AddHours(-hours);
-                return _context.Measurements.OrderByDescending(o => o.InsertDateTime).Where(w => w.InsertDateTime >= minDate).ToList();
+                return _context.Measurements.OrderByDescending(o => o.InsertDateTime).Where(w => w.InsertDateTime >= minDate && w.DeviceId == deviceId).ToList();
             }
             catch (Exception ex)
             {
