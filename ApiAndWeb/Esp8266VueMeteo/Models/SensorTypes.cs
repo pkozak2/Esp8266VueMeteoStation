@@ -16,7 +16,7 @@ namespace Esp8266VueMeteo.Models
             {"HeaterHumidity", new List<string>{ "humidity", "HECA_humidity" } },
             {"GpsTime", new List<string>{"GPS_time"} },
             {"GpsDate", new List<string>{"GPS_date"} },
-            {"WifiRssi", new List<string>{ "wifi_rssi" } },
+            {"WifiRssi", new List<string>{ "wifi_rssi", "signal" } },
             {"CellVoltage", new List<string>{ "cell_voltage" } },
 
         };
