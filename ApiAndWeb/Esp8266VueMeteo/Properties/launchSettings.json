@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "VueStartingProject": {
+    "Esp8266VueMeteo": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

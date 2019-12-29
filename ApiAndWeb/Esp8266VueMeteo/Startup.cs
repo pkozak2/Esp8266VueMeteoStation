@@ -4,10 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using VueCliMiddleware;
-using Microsoft.AspNetCore.Mvc;
 using Esp8266VueMeteo.Database;
 using Esp8266VueMeteo.Services;
 using Esp8266VueMeteo.Repositories;
+using Microsoft.Extensions.Hosting;
 
 namespace VueStartingProject
 {
@@ -23,8 +23,8 @@ namespace VueStartingProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            //services.AddControllersWithViews().AddNewtonsoftJson();
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllersWithViews().AddNewtonsoftJson();
 
             // In production, the Vue files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -44,7 +44,7 @@ namespace VueStartingProject
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -56,21 +56,23 @@ namespace VueStartingProject
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseRouting();
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            app.UseAuthorization();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
+            
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "clientapp";
+                if (env.IsDevelopment())
+                    spa.Options.SourcePath = "clientapp";
+                else
+                    spa.Options.SourcePath = "dist";
 
                 if (env.IsDevelopment())
                 {
