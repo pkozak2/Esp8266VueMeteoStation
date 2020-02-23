@@ -202,13 +202,29 @@ export default {
         }
       }
     };
+        },
+        props: {
+            sensors: {
+                type: String,
+                default: "smog"
+            }
+        },
+        mounted() {
+            this.GetMeasurements();
+    
   },
-  mounted() {
-    measurementsService.GetUserDevices("pkozak").then(response => {
-      this.sensors = response.data;
-    });
-  },
-  methods: {
+        methods: {
+            GetMeasurements() {
+                if (this.sensors !== "smog") {
+                    measurementsService.GetUserDevices("pkozak").then(response => {
+                        this.sensors = response.data;
+                    });
+                } else {
+                    measurementsService.GetDeviceMeasurements("6549084").then(response => {
+                        this.sensors = response.data;
+                    })
+                }
+            },
     GetDateFromDateTimeOffset(data) {
       return data === null
         ? "Brak"

@@ -26,6 +26,12 @@ namespace VueStartingProject.Controllers
             return new JsonResult(_devicesService.GetUserDevices());
         }
 
+        [HttpGet("sensors/esp/{espId}")]
+            public IActionResult GetSensorsByEspId(string espId)
+        {
+            return new JsonResult(_devicesService.GetUserDevices(espId));
+        }
+
         [HttpGet("measurements/{deviceId}")]
         public IActionResult GetCurrentMeasurementsForDevice(Guid deviceId)
         {

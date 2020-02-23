@@ -9,5 +9,8 @@ export default{
     },
     GetMeasurementsFromLastHours(deviceId, hours){
         return axios.get(`${apiUrl}/measurements/${deviceId}/${hours}`);
+    },
+    GetDeviceMeasurements(espId) {
+        return axios.get(`${apiUrl}/sensors/esp/${espId}`);
     }
 }

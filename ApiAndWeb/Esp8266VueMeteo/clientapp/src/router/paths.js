@@ -51,8 +51,9 @@ export default [
     component: () => import(`@/views/DefaultView.vue`),
     children: [
       {
-        path: "",
+        path: ":sensors",
         name: "Dashboard",
+        props: true,
         component: () => import(`@/components/DashViews/Dashboard.vue`)
       }
       // {
