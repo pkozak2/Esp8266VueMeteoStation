@@ -11,7 +11,7 @@ namespace Esp8266VueMeteo.Services
     {
         List<SensorModel> GetAllDevices();
         Guid? AuthorizeSensor(string deviceId, string httpContextUserName, string httpContextPassword);
-        List<DataSensorModel> GetUserDevices(string? deviceId = null);
+        List<DataSensorModel> GetUserDevices(string deviceId = null);
     }
     public class DevicesService : IDevicesService
     {
@@ -36,7 +36,7 @@ namespace Esp8266VueMeteo.Services
             return  devices.Select(s => new SensorModel() { SensorId = s.DeviceId, SensorDescription = s.Description, SensorDescritionExtra = s.ExtraDescription, SensorName = s.DeviceName }).ToList();
         }
 
-        public List<DataSensorModel> GetUserDevices(string? deviceId = null)
+        public List<DataSensorModel> GetUserDevices(string deviceId = null)
         {
             var result = new List<DataSensorModel>();
             var devices = !string.IsNullOrEmpty(deviceId) ? _devicessRepository.GetDevicesByEspId(deviceId) : _devicessRepository.GetAllActiveDevices();

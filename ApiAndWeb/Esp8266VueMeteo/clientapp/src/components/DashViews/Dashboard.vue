@@ -204,7 +204,7 @@ export default {
     };
         },
         props: {
-            sensors: {
+            smog: {
                 type: String,
                 default: "smog"
             }
@@ -215,7 +215,7 @@ export default {
   },
         methods: {
             GetMeasurements() {
-                if (this.sensors !== "smog") {
+                if (this.$route.name === "Dashboard1") {
                     measurementsService.GetUserDevices("pkozak").then(response => {
                         this.sensors = response.data;
                     });
