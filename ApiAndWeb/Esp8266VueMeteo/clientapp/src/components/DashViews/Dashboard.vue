@@ -1,19 +1,32 @@
 <template>
   <v-container fluid>
-    <v-row v-for="(sensor,i) in sensors" :key="i">
+    <v-row v-for="(sensor, i) in sensors" :key="i">
       <v-col cols="12">
         <v-row>
           <v-col cols="12" align="center">
             <v-row>
-              <v-col>{{sensor.sensorName}}</v-col>
+              <v-col>{{ sensor.sensorName }}</v-col>
             </v-row>
             <v-row>
-              <v-col>Ostatnia aktualizacja: {{GetDateFromDateTimeOffset(sensor.measurements.insertDate)}}</v-col>
+              <v-col
+                >Ostatnia aktualizacja:
+                {{
+                  GetDateFromDateTimeOffset(sensor.measurements.insertDate)
+                }}</v-col
+              >
             </v-row>
           </v-col>
         </v-row>
         <v-row justify="center">
-          <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.temperature">
+          <v-col
+            cols="12"
+            sm="5"
+            md="6"
+            lg="3"
+            xl="3"
+            pa-2
+            v-if="sensor.measurements.temperature"
+          >
             <StatsCard
               color="green"
               icon="fa-temperature-low"
@@ -31,7 +44,15 @@
               smallValue="&deg;F"
             />
           </v-col>-->
-          <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.pm25">
+          <v-col
+            cols="12"
+            sm="5"
+            md="6"
+            lg="3"
+            xl="3"
+            pa-2
+            v-if="sensor.measurements.pm25"
+          >
             <StatsCard
               color="red"
               icon="fa-industry"
@@ -40,7 +61,15 @@
               smallValue="&micro;g/m<sup>3</sup>"
             />
           </v-col>
-          <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.pm10">
+          <v-col
+            cols="12"
+            sm="5"
+            md="6"
+            lg="3"
+            xl="3"
+            pa-2
+            v-if="sensor.measurements.pm10"
+          >
             <StatsCard
               color="red"
               icon="fa-industry"
@@ -49,7 +78,15 @@
               smallValue="&micro;g/m<sup>3</sup>"
             />
           </v-col>
-          <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.wifiRssi">
+          <v-col
+            cols="12"
+            sm="5"
+            md="6"
+            lg="3"
+            xl="3"
+            pa-2
+            v-if="sensor.measurements.wifiRssi"
+          >
             <StatsCard
               color="blue"
               icon="fa-wifi"
@@ -58,7 +95,15 @@
               smallValue="dBm"
             />
           </v-col>
-          <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.pressureHpa">
+          <v-col
+            cols="12"
+            sm="5"
+            md="6"
+            lg="3"
+            xl="3"
+            pa-2
+            v-if="sensor.measurements.pressureHpa"
+          >
             <StatsCard
               color="red"
               icon="fa-tachometer-alt"
@@ -67,7 +112,15 @@
               smallValue="hPa"
             />
           </v-col>
-          <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.humidity">
+          <v-col
+            cols="12"
+            sm="5"
+            md="6"
+            lg="3"
+            xl="3"
+            pa-2
+            v-if="sensor.measurements.humidity"
+          >
             <StatsCard
               color="orange"
               icon="fa-percent"
@@ -88,51 +141,87 @@
             <v-row justify="center">
               <v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
                 <ChartsCard
-                  :chartData="GetChartData(sensor.sensorId, 'temperature', 'Temperatura (°C)')"
+                  :chartData="
+                    GetChartData(
+                      sensor.sensorId,
+                      'temperature',
+                      'Temperatura (°C)'
+                    )
+                  "
                   :options="chartOptions"
                 >
                   <h3 class="title font-weight-light">Temperatura</h3>
-                  <p
-                    class="category d-inline-flex font-weight-light"
-                  >Z ostatnich {{sensorHistoryHours}} godzin</p>
+                  <p class="category d-inline-flex font-weight-light">
+                    Z ostatnich {{ sensorHistoryHours }} godzin
+                  </p>
 
                   <!-- <template slot="actions">
-                <v-icon class="mr-2" small>fa-cat</v-icon>
-                <span class="caption grey--text font-weight-light">campaign sent 26 minutes ago</span>
-                  </template>-->
+            <v-icon class="mr-2" small>fa-cat</v-icon>
+            <span class="caption grey--text font-weight-light">campaign sent 26 minutes ago</span>
+              </template>-->
                 </ChartsCard>
               </v-col>
+              <!--<v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
+      <ChartsCard
+        :chartData="GetChartData(sensor.sensorId, 'wifiRssi', 'WiFi RSSI')"
+        :options="chartOptions"
+      >
+        <h3 class="title font-weight-light">WiFi RSSI</h3>
+        <p
+          class="category d-inline-flex font-weight-light"
+        >Z ostatnich {{sensorHistoryHours}} godzin</p>
+      </ChartsCard>
+    </v-col>-->
               <v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
                 <ChartsCard
-                  :chartData="GetChartData(sensor.sensorId, 'wifiRssi', 'WiFi RSSI')"
-                  :options="chartOptions"
-                >
-                  <h3 class="title font-weight-light">WiFi RSSI</h3>
-                  <p
-                    class="category d-inline-flex font-weight-light"
-                  >Z ostatnich {{sensorHistoryHours}} godzin</p>
-                </ChartsCard>
-              </v-col>
-              <v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
-                <ChartsCard
-                  :chartData="GetChartData(sensor.sensorId, 'pressureHpa', 'Ciśnienie hPa')"
+                  :chartData="
+                    GetChartData(
+                      sensor.sensorId,
+                      'pressureHpa',
+                      'Ciśnienie hPa'
+                    )
+                  "
                   :options="chartOptions"
                 >
                   <h3 class="title font-weight-light">Ciśnienie hPa</h3>
-                  <p
-                    class="category d-inline-flex font-weight-light"
-                  >Z ostatnich {{sensorHistoryHours}} godzin</p>
+                  <p class="category d-inline-flex font-weight-light">
+                    Z ostatnich {{ sensorHistoryHours }} godzin
+                  </p>
                 </ChartsCard>
               </v-col>
               <v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
                 <ChartsCard
-                  :chartData="GetChartData(sensor.sensorId, 'humidity', 'Wilgotność')"
+                  :chartData="
+                    GetChartData(sensor.sensorId, 'humidity', 'Wilgotność')
+                  "
                   :options="chartOptions"
                 >
                   <h3 class="title font-weight-light">Wilgotność</h3>
-                  <p
-                    class="category d-inline-flex font-weight-light"
-                  >Z ostatnich {{sensorHistoryHours}} godzin</p>
+                  <p class="category d-inline-flex font-weight-light">
+                    Z ostatnich {{ sensorHistoryHours }} godzin
+                  </p>
+                </ChartsCard>
+              </v-col>
+              <v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
+                <ChartsCard
+                  :chartData="GetChartData(sensor.sensorId, 'pm25', 'PM2.5')"
+                  :options="chartOptions"
+                >
+                  <h3 class="title font-weight-light">Pm2.5</h3>
+                  <p class="category d-inline-flex font-weight-light">
+                    Z ostatnich {{ sensorHistoryHours }} godzin
+                  </p>
+                </ChartsCard>
+              </v-col>
+              <v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
+                <ChartsCard
+                  :chartData="GetChartData(sensor.sensorId, 'pm10', 'PM10')"
+                  :options="chartOptions"
+                >
+                  <h3 class="title font-weight-light">Pm10</h3>
+                  <p class="category d-inline-flex font-weight-light">
+                    Z ostatnich {{ sensorHistoryHours }} godzin
+                  </p>
                 </ChartsCard>
               </v-col>
             </v-row>
@@ -203,12 +292,27 @@ export default {
       }
     };
   },
+  props: {
+    smog: {
+      type: String,
+      default: "smog"
+    }
+  },
   mounted() {
-    measurementsService.GetUserDevices("pkozak").then(response => {
-      this.sensors = response.data;
-    });
+    this.GetMeasurements();
   },
   methods: {
+    GetMeasurements() {
+      if (this.$route.name === "Dashboard1") {
+        measurementsService.GetUserDevices("pkozak").then(response => {
+          this.sensors = response.data;
+        });
+      } else {
+        measurementsService.GetDeviceMeasurements("6549084").then(response => {
+          this.sensors = response.data;
+        });
+      }
+    },
     GetDateFromDateTimeOffset(data) {
       return data === null
         ? "Brak"

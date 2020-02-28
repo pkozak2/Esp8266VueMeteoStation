@@ -1,6 +1,11 @@
 <template>
   <v-card v-bind="$attrs" :style="styles" v-on="$listeners">
-    <BaseOffset v-if="hasOffset" :inline="inline" :full-width="fullWidth" :offset="offset">
+    <BaseOffset
+      v-if="hasOffset"
+      :inline="inline"
+      :full-width="fullWidth"
+      :offset="offset"
+    >
       <v-card
         v-if="!$slots.offset"
         :color="color"
@@ -37,7 +42,7 @@ export default {
   props: {
     color: {
       type: String,
-      default: "secondary"
+      default: "accent"
     },
     elevation: {
       type: [Number, String],
