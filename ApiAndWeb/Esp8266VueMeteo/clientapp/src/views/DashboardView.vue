@@ -1,9 +1,9 @@
 <template>
   <v-content>
     <v-app id="dashboard-view" dark>
-      <Toolbar />
+      <Toolbar @toogle-drawer="drawer = !drawer" />
 
-      <Drawer />
+      <Drawer v-model="drawer" />
 
       <v-fade-transition mode="out-in">
         <router-view />
@@ -21,6 +21,9 @@ import CFooter from "@/components/core/Footer";
 export default {
   name: "DashboardView",
   components: { Toolbar, Drawer, CFooter },
+  data: () => ({
+    drawer: false
+  }),
   metaInfo() {
     return {
       title: "Vuetify Admin Dashboard by ClintOxx"
@@ -29,5 +32,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

@@ -125,11 +125,57 @@
 //  }
 //];
 
+// export default [
+//   {
+//     path: "*",
+//     meta: {
+//       name: ""
+//     },
+//     redirect: {
+//       path: "/dashboard"
+//     }
+//   },
+//   {
+//     path: "/dashboard",
+//     meta: {
+//       name: "Dashboard View",
+//       requiresAuth: false
+//     },
+//     // component: () => import(`@/views/DashboardView.vue`),
+//     component: () => import(`@/views/DefaultView.vue`),
+//     children: [
+//       {
+//         path: "",
+//         name: "Dashboard",
+//         props: true,
+//         component: () => import(`@/components/DashViews/Dashboard.vue`)
+//         }
+
+//     ]
+//     },
+//     {
+//     path: "/dashboard1",
+//     meta: {
+//         name: "Dashboard View",
+//         requiresAuth: false
+//     },
+//     // component: () => import(`@/views/DashboardView.vue`),
+//     component: () => import(`@/views/DefaultView.vue`),
+//     children: [
+//         {
+//             path: "",
+//             name: "Dashboard1",
+//             component: () => import(`@/components/DashViews/Dashboard.vue`)
+//         },
+//     ]
+//   }
+// ];
 export default [
   {
     path: "*",
     meta: {
-      name: ""
+      name: "",
+      requiresAuth: false
     },
     redirect: {
       path: "/dashboard"
@@ -138,35 +184,21 @@ export default [
   {
     path: "/dashboard",
     meta: {
-      name: "Dashboard View",
+      name: "Dashboard view",
       requiresAuth: false
     },
-    // component: () => import(`@/views/DashboardView.vue`),
-    component: () => import(`@/views/DefaultView.vue`),
+    component: () => import("@/views/DashboardView.vue"),
     children: [
       {
         path: "",
         name: "Dashboard",
-        props: true,
-        component: () => import(`@/components/DashViews/Dashboard.vue`)
-        }
-   
-    ]
-    },
-    {
-    path: "/dashboard1",
-    meta: {
-        name: "Dashboard View",
-        requiresAuth: false
-    },
-    // component: () => import(`@/views/DashboardView.vue`),
-    component: () => import(`@/views/DefaultView.vue`),
-    children: [
-        {
-            path: "",
-            name: "Dashboard1",
-            component: () => import(`@/components/DashViews/Dashboard.vue`)
-        },
+        component: () => import("@/components/DashViews/Dashboard.vue")
+      },
+      {
+        path: "all",
+        name: "Dashboard1",
+        component: () => import("@/components/DashViews/Dashboard.vue")
+      }
     ]
   }
 ];

@@ -1,31 +1,36 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
-import pl from 'vuetify/es5/locale/pl';
+import Vue from "vue";
+import Vuetify from "vuetify/lib";
+import pl from "vuetify/es5/locale/pl";
 
 Vue.use(Vuetify);
 
+const CUSTOM_ICONS = {
+  clear: "fas fa-times"
+};
+
 export default new Vuetify({
   theme: {
-      options: {
-        customProperties: true,
-      },
+    options: {
+      customProperties: true
+    },
     themes: {
       light: {
-        primary: '#ee44aa',
-        secondary: '#424242',
-        accent: '#82B1FF',
-        error: '#FF5252',
-        info: '#2196F3',
-        success: '#4CAF50',
-        warning: '#FFC107'
-      },
-    },
+        primary: "#3f51b5",
+        secondary: "#ff9800",
+        accent: "#607d8b",
+        error: "#f44336",
+        warning: "#ffc107",
+        info: "#00bcd4",
+        success: "#4caf50"
+      }
+    }
   },
-    lang: {
-      locales: { pl },
-      current: 'pl',
-    },
+  lang: {
+    locales: { pl },
+    current: "pl"
+  },
   icons: {
-    iconfont: 'fa',
-  },
+    iconfont: "fa",
+    values: CUSTOM_ICONS
+  }
 });
