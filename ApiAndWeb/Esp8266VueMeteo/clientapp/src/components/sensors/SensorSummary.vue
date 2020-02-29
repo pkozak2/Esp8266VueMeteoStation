@@ -45,7 +45,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <charts-card></charts-card>
+        <charts-card title="Wykres dzienny"></charts-card>
       </v-col>
     </v-row>
   </v-container>
