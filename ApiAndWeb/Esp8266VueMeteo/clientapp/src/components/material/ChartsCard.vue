@@ -3,7 +3,6 @@
     <v-card slot="offset" :class="`elevation-${elevation}`" :color="color" class="pa-4" dark>
       <LineChart :chartData="chartData" :options="options" v-if="chartData" />
     </v-card>
-
     <slot></slot>
     <slot slot="actions" name="actions"></slot>
   </BaseCard>
