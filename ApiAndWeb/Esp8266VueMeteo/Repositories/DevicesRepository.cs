@@ -11,6 +11,7 @@ namespace Esp8266VueMeteo.Repositories
     {
         List<Devices> GetAllActiveDevices();
         List<Devices> GetDevicesByEspId(string espId);
+        Devices GetDeviceById(Guid deviceId);
     }
     public class DevicesRepository : IDevicesRepository
     {
@@ -32,6 +33,19 @@ namespace Esp8266VueMeteo.Repositories
             {
                 _logger.LogError(ex, "Error when GetAllActiveDevices");
                 return new List<Devices>();
+            }
+        }
+
+        public Devices GetDeviceById(Guid deviceId)
+        {
+            try
+            {
+                return _context.Devices.FirstOrDefault(w => w.DeviceId == deviceId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error when GetDeviceById");
+                return null;
             }
         }
 

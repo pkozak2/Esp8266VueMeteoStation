@@ -8,6 +8,7 @@ namespace Esp8266VueMeteo.Repositories
     public interface IJsonUpdatesRepository
     {
         bool SaveUpdate<T>(Guid deviceId, T data);
+        bool SaveUpdate(Guid deviceId, string data);
     }
     public class JsonUpdatesRepository : IJsonUpdatesRepository
     {
@@ -25,6 +26,22 @@ namespace Esp8266VueMeteo.Repositories
             {
                 var jsonData = JsonConvert.SerializeObject(data, Formatting.None, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
                 _context.JsonUpdates.Add(new Database.Models.JsonUpdates() { DeviceId = deviceId, InsertDateTime = DateTimeOffset.Now, JsonValue = jsonData });
+                return _context.SaveChanges() > 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error when Save JSON DATA");
+                return false;
+            }
+        }
+
+        public bool SaveUpdate(Guid deviceId, string data)
+        {
+            _logger.LogInformation("Save JSON DATA");
+            try
+            {
+               
+                _context.JsonUpdates.Add(new Database.Models.JsonUpdates() { DeviceId = deviceId, InsertDateTime = DateTimeOffset.Now, JsonValue = data });
                 return _context.SaveChanges() > 0;
             }
             catch (Exception ex)

@@ -9,7 +9,7 @@ using Esp8266VueMeteo.Database;
 using Esp8266VueMeteo.Services;
 using Esp8266VueMeteo.Repositories;
 
-namespace VueStartingProject
+namespace Esp8266VueMeteo
 {
     public class Startup
     {
@@ -23,6 +23,9 @@ namespace VueStartingProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var appSettings = Configuration.GetSection("AppSettings").Get<AppSettings>();
+            services.AddSingleton(appSettings);
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             //services.AddControllersWithViews().AddNewtonsoftJson();
 
@@ -36,6 +39,8 @@ namespace VueStartingProject
 
             services.AddTransient<IDevicesService, DevicesService>();
             services.AddTransient<IMeasurementsService, MeasurementsService>();
+            services.AddTransient<IJsonUpdatesService, JsonUpdatesService>();
+            services.AddTransient<IAqiEcoService, AqiEcoService>();
 
             services.AddTransient<IDevicesRepository, DevicesRepository>();
             services.AddTransient<IMeasurementsRepository, MeasurementsRepository>();

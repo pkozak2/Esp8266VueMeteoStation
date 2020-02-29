@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace VueStartingProject
+namespace Esp8266VueMeteo
 {
     public class Program
     {

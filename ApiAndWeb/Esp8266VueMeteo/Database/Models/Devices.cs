@@ -39,6 +39,9 @@ namespace Esp8266VueMeteo.Database.Models
         public DateTimeOffset InsertDateTime { get; set; }
         public bool IsActive { get; set; }
 
+        public bool SendToAqiEco { get; set; }
+        public string AqiEcoUpdateUrl { get; set; }
+
         [JsonIgnore]
         [IgnoreDataMember]
         public ICollection<Measurements> Measurements { get; set; }

@@ -1,9 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using Esp8266VueMeteo.Models;
 using Esp8266VueMeteo.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Esp8266VueMeteo.Controllers
 {
@@ -13,10 +16,14 @@ namespace Esp8266VueMeteo.Controllers
     {
         private readonly IDevicesService _devicesService;
         private readonly IMeasurementsService _measurementsService;
-        public SensorUpdateController(IDevicesService devicesService, IMeasurementsService measurementsService)
+        private readonly IJsonUpdatesService _jsonUpdatesService;
+        private readonly IAqiEcoService _aqiEcoService;
+        public SensorUpdateController(IDevicesService devicesService, IMeasurementsService measurementsService, IJsonUpdatesService jsonUpdatesService, IAqiEcoService aqiEcoService)
         {
             _devicesService = devicesService;
             _measurementsService = measurementsService;
+            _jsonUpdatesService = jsonUpdatesService;
+            _aqiEcoService = aqiEcoService;
         }
 
         [HttpGet]
@@ -26,7 +33,7 @@ namespace Esp8266VueMeteo.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateData([FromBody]SensorUpdateRequest request)
+        public async Task<IActionResult> UpdateData()
         {
             string password;
             string userName;
@@ -43,12 +50,21 @@ namespace Esp8266VueMeteo.Controllers
                 return Unauthorized("Invalid Auth Header!");
             }
 
+            string requestString;
+            using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+            {
+                requestString = await reader.ReadToEndAsync();
+            }
+
+            var request = JsonConvert.DeserializeObject<SensorUpdateRequest>(requestString);
+
             var deviceId = _devicesService.AuthorizeSensor(request.EspId, userName, password);
             if (!deviceId.HasValue || deviceId == Guid.Empty)
             {
                 return Unauthorized("Invalid UserName/Password or Device not found!");
             }
-
+            _jsonUpdatesService.SaveUpdate(deviceId.Value, requestString);
+            _aqiEcoService.SendToAqi(deviceId.Value, requestString);
             var result = _measurementsService.AddSensorMeasurement(deviceId.Value, request.DataValues);
             return Ok(result);
         }

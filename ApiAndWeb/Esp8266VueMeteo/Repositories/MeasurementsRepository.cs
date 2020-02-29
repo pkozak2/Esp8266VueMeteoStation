@@ -18,12 +18,10 @@ namespace Esp8266VueMeteo.Repositories
     {
         private readonly ILogger _logger;
         private readonly MeteoDbContext _context;
-        private readonly IJsonUpdatesRepository _jsonUpdatesRepository;
-        public MeasurementsRepository(MeteoDbContext context, IJsonUpdatesRepository jsonUpdatesRepository, ILogger<MeasurementsRepository> logger)
+        public MeasurementsRepository(MeteoDbContext context, ILogger<MeasurementsRepository> logger)
         {
             _logger = logger;
             _context = context;
-            _jsonUpdatesRepository = jsonUpdatesRepository;
         }
 
         public bool AddSensorMeasurement(Guid deviceId, double? pm25, double? pm10, double? temperature, double? humidity, double? pressure, double? heaterTemperature, double? heaterHumidity, double? rssi, double? cellVoltage)
@@ -45,7 +43,7 @@ namespace Esp8266VueMeteo.Repositories
                     CellVoltage = cellVoltage,
                     WifiRssi = rssi
                 };
-                _jsonUpdatesRepository.SaveUpdate(deviceId, measurement);
+                //_jsonUpdatesRepository.SaveUpdate(deviceId, measurement);
                 _context.Measurements.Add(measurement);
                 return _context.SaveChanges() >= 1;
             }
