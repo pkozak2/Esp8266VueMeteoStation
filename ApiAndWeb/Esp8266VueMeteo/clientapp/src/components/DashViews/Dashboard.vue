@@ -10,15 +10,21 @@
             <v-row>
               <v-col>
                 Ostatnia aktualizacja:
-                {{
-                GetDateFromDateTimeOffset(sensor.measurements.insertDate)
-                }}
+                {{ GetDateFromDateTimeOffset(sensor.measurements.insertDate) }}
               </v-col>
             </v-row>
           </v-col>
         </v-row>
         <v-row justify="center">
-          <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.temperature">
+          <v-col
+            cols="12"
+            sm="5"
+            md="6"
+            lg="3"
+            xl="3"
+            pa-2
+            v-if="sensor.measurements.temperature"
+          >
             <StatsCard
               color="green"
               icon="fa-temperature-low"
@@ -36,7 +42,15 @@
               smallValue="&deg;F"
             />
           </v-col>-->
-          <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.pm25">
+          <v-col
+            cols="12"
+            sm="5"
+            md="6"
+            lg="3"
+            xl="3"
+            pa-2
+            v-if="sensor.measurements.pm25"
+          >
             <StatsCard
               color="red"
               icon="fa-industry"
@@ -45,7 +59,15 @@
               smallValue="&micro;g/m<sup>3</sup>"
             />
           </v-col>
-          <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.pm10">
+          <v-col
+            cols="12"
+            sm="5"
+            md="6"
+            lg="3"
+            xl="3"
+            pa-2
+            v-if="sensor.measurements.pm10"
+          >
             <StatsCard
               color="red"
               icon="fa-industry"
@@ -54,7 +76,15 @@
               smallValue="&micro;g/m<sup>3</sup>"
             />
           </v-col>
-          <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.wifiRssi">
+          <v-col
+            cols="12"
+            sm="5"
+            md="6"
+            lg="3"
+            xl="3"
+            pa-2
+            v-if="sensor.measurements.wifiRssi"
+          >
             <StatsCard
               color="blue"
               icon="fa-wifi"
@@ -63,7 +93,15 @@
               smallValue="dBm"
             />
           </v-col>
-          <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.pressureHpa">
+          <v-col
+            cols="12"
+            sm="5"
+            md="6"
+            lg="3"
+            xl="3"
+            pa-2
+            v-if="sensor.measurements.pressureHpa"
+          >
             <StatsCard
               color="red"
               icon="fa-tachometer-alt"
@@ -72,7 +110,15 @@
               smallValue="hPa"
             />
           </v-col>
-          <v-col cols="12" sm="5" md="6" lg="3" xl="3" pa-2 v-if="sensor.measurements.humidity">
+          <v-col
+            cols="12"
+            sm="5"
+            md="6"
+            lg="3"
+            xl="3"
+            pa-2
+            v-if="sensor.measurements.humidity"
+          >
             <StatsCard
               color="orange"
               icon="fa-percent"
@@ -103,9 +149,9 @@
                   :options="chartOptions"
                 >
                   <h3 class="title font-weight-light">Temperatura</h3>
-                  <p
-                    class="category d-inline-flex font-weight-light"
-                  >Z ostatnich {{ sensorHistoryHours }} godzin</p>
+                  <p class="category d-inline-flex font-weight-light">
+                    Z ostatnich {{ sensorHistoryHours }} godzin
+                  </p>
 
                   <!-- <template slot="actions">
             <v-icon class="mr-2" small>fa-cat</v-icon>
@@ -136,9 +182,9 @@
                   :options="chartOptions"
                 >
                   <h3 class="title font-weight-light">Ciśnienie hPa</h3>
-                  <p
-                    class="category d-inline-flex font-weight-light"
-                  >Z ostatnich {{ sensorHistoryHours }} godzin</p>
+                  <p class="category d-inline-flex font-weight-light">
+                    Z ostatnich {{ sensorHistoryHours }} godzin
+                  </p>
                 </ChartsCard>
               </v-col>
               <v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
@@ -149,9 +195,9 @@
                   :options="chartOptions"
                 >
                   <h3 class="title font-weight-light">Wilgotność</h3>
-                  <p
-                    class="category d-inline-flex font-weight-light"
-                  >Z ostatnich {{ sensorHistoryHours }} godzin</p>
+                  <p class="category d-inline-flex font-weight-light">
+                    Z ostatnich {{ sensorHistoryHours }} godzin
+                  </p>
                 </ChartsCard>
               </v-col>
               <v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
@@ -160,9 +206,9 @@
                   :options="chartOptions"
                 >
                   <h3 class="title font-weight-light">Pm2.5</h3>
-                  <p
-                    class="category d-inline-flex font-weight-light"
-                  >Z ostatnich {{ sensorHistoryHours }} godzin</p>
+                  <p class="category d-inline-flex font-weight-light">
+                    Z ostatnich {{ sensorHistoryHours }} godzin
+                  </p>
                 </ChartsCard>
               </v-col>
               <v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
@@ -171,9 +217,9 @@
                   :options="chartOptions"
                 >
                   <h3 class="title font-weight-light">Pm10</h3>
-                  <p
-                    class="category d-inline-flex font-weight-light"
-                  >Z ostatnich {{ sensorHistoryHours }} godzin</p>
+                  <p class="category d-inline-flex font-weight-light">
+                    Z ostatnich {{ sensorHistoryHours }} godzin
+                  </p>
                 </ChartsCard>
               </v-col>
             </v-row>

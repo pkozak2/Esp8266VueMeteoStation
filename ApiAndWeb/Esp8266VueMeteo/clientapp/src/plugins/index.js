@@ -1,1 +1,1 @@
-import './chartist'
+import "./chartist";

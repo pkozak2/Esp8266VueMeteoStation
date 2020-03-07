@@ -1,7 +1,9 @@
 <template>
   <v-card class="mt-4 mx-auto">
     <v-sheet :style="styles" class="ml-4" :color="color" :elevation="elevation">
-      <v-icon :size="iconSize" class="pa-4" :color="iconColor">{{icon}}</v-icon>
+      <v-icon :size="iconSize" class="pa-4" :color="iconColor">
+        {{ icon }}
+      </v-icon>
     </v-sheet>
     <v-card-text class="pt-2">
       <div class="values text-right pt-3 pr-3">
@@ -13,7 +15,9 @@
       </div>
       <div>
         <v-divider class="my-2" v-if="showDivider"></v-divider>
-        <span class="caption grey--text font-weight-light">{{ description }}</span>
+        <span class="caption grey--text font-weight-light">
+          {{ description }}
+        </span>
       </div>
     </v-card-text>
   </v-card>

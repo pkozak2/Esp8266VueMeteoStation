@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="12" class="title text-center">{{sensorName}}</v-col>
+      <v-col cols="12" class="title text-center">{{ sensorName }}</v-col>
     </v-row>
 
     <v-row justify="center">
