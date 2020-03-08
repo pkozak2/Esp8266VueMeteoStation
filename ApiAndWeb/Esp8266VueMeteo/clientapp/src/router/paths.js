@@ -192,7 +192,7 @@ export default [
       {
         path: "",
         name: "Dashboard",
-        component: () => import("@/components/DashViews/Redirect.vue")
+        component: () => import("@/components/DashViews/NewDashboard.vue")
       },
       {
         path: "all",
