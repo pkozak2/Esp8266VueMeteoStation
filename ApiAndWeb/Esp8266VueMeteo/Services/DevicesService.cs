@@ -10,7 +10,7 @@ namespace Esp8266VueMeteo.Services
     public interface IDevicesService
     {
         List<SensorModel> GetAllDevices();
-        Guid? AuthorizeSensor(string deviceId, string httpContextUserName, string httpContextPassword);
+        Guid? AuthorizeSensor(string deviceId, string httpContextUserName = null, string httpContextPassword = null);
         List<DataSensorModel> GetUserDevices(string deviceId = null);
     }
     public class DevicesService : IDevicesService
@@ -24,7 +24,7 @@ namespace Esp8266VueMeteo.Services
             _devicessRepository = devicesRepository;
             _measurementsRepository = measurementsRepository;
         }
-        public Guid? AuthorizeSensor(string deviceId, string httpContextUserName, string httpContextPassword)
+        public Guid? AuthorizeSensor(string deviceId, string httpContextUserName = null, string httpContextPassword = null)
         {
             _logger.LogInformation($"Authorize sensor: {deviceId}");
             return _devicessRepository.GetDevicesByEspId(deviceId).Where(w => w.HttpUserName == httpContextUserName && w.HttpPassword == httpContextPassword).FirstOrDefault()?.DeviceId;

@@ -35,15 +35,18 @@ namespace Esp8266VueMeteo.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateData()
         {
-            string password;
-            string userName;
+            string password = string.Empty;
+            string userName  = string.Empty;
             try
             {
-                var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
-                var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
-                var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
-                userName = credentials[0];
-                password = credentials[1];
+                if (Request.Headers.ContainsKey("Authorization"))
+                {
+                    var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
+                    var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
+                    var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
+                    userName = credentials[0];
+                    password = credentials[1];
+                }
             }
             catch
             {
