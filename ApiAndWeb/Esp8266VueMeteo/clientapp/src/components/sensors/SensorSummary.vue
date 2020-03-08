@@ -41,22 +41,28 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12">datatab</v-col>
+      <v-col cols="12">
+        <sensor-datatable
+          :items="averageMeasurements"
+          :loading="averageMeasurementsLoding"
+        ></sensor-datatable>
+      </v-col>
     </v-row>
     <v-row>
       <v-col cols="12">
-        <charts-card title="Wykres dzienny"></charts-card>
+        <charts-card title="Wykres dzienny" bottom></charts-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script>
 import moment from "moment";
-import StatsCard from "../newmaterial/StatsCard.vue";
+import StatsCard from "@/components/newmaterial/StatsCard.vue";
 import ChartsCard from "@/components/newmaterial/ChartsCard.vue";
+import SensorDatatable from "@/components/newmaterial/SensorDatatable.vue";
 export default {
   name: "SensorSummary",
-  components: { ChartsCard, StatsCard },
+  components: { ChartsCard, StatsCard, SensorDatatable },
   props: {
     sensorName: {
       type: String,
@@ -74,6 +80,18 @@ export default {
           pressure: "~",
           humidity: "~"
         };
+      }
+    },
+    averageMeasurementsLoding: {
+      type: Boolean
+    },
+    averageMeasurements: {
+      type: Array,
+      default: function() {
+        return [
+          { name: "PM", subname: "2.5", value: 50, percent: 10, index: 0 },
+          { name: "PM", subname: "10", value: 50, percent: 10, index: 1 }
+        ];
       }
     }
   },

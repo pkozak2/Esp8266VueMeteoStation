@@ -8,14 +8,14 @@
     <v-card-text class="pt-2">
       <div class="values text-right pt-3 pr-3">
         <div class="font-weight-light mb-1">{{ title }}</div>
-        <h3 class="title display-1 font-weight-light">
+        <h3 class="title display-1 font-weight-light" v-if="value">
           {{ value }}
           <small v-html="smallValue"></small>
         </h3>
       </div>
       <div>
         <v-divider class="my-2" v-if="showDivider"></v-divider>
-        <span class="caption grey--text font-weight-light">
+        <span class="caption grey--text font-weight-light" v-if="description">
           {{ description }}
         </span>
       </div>

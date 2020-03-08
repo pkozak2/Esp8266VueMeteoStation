@@ -5,24 +5,38 @@
       class="mx-auto"
       :color="color"
       :elevation="elevation"
+      v-if="!bottom"
     >
       <slot></slot>
     </v-sheet>
-    <v-card-text class="pt-0">
-      <div class="title font-weight-light mb-2">{{ title }}</div>
+    <v-card-text :class="bottom ? 'pt-5' : 'pt-0'">
+      <div class="title font-weight-light mb-2 text-center">{{ title }}</div>
       <div class="subheading font-weight-light grey--text">{{ subtitle }}</div>
       <v-divider class="my-2" v-if="showDivider"></v-divider>
-      <v-icon class="mr-2" small>{{ icon }}</v-icon>
-      <span class="caption grey--text font-weight-light">
+      <v-icon class="mr-2" v-if="icon" small>{{ icon }}</v-icon>
+      <span class="caption grey--text font-weight-light" v-if="description">
         {{ description }}
       </span>
     </v-card-text>
+    <v-sheet
+      :style="styles"
+      class="mx-auto"
+      :color="color"
+      :elevation="elevation"
+      v-if="bottom"
+    >
+      <slot></slot>
+    </v-sheet>
   </v-card>
 </template>
 <script>
 export default {
   name: "OffsetCard",
   props: {
+    bottom: {
+      type: Boolean,
+      default: false
+    },
     color: {
       type: String,
       default: "accent"
@@ -54,12 +68,17 @@ export default {
   },
   computed: {
     styles() {
-      return {
-        top: `-${this.offset}px`,
-        position: "relative",
-        "max-width": this.fullWidth ? "100%" : "calc(100% - 32px)",
-        "min-height": `${this.offset * 2}px`
-      };
+      var position = this.bottom
+        ? { bottom: `-${this.offset}px` }
+        : { top: `-${this.offset}px` };
+      return Object.assign(
+        {
+          position: "relative",
+          "max-width": this.fullWidth ? "100%" : "calc(100% - 32px)",
+          "min-height": `${this.offset * 2}px`
+        },
+        position
+      );
     },
     showDivider() {
       return !!this.description || !!this.icon;

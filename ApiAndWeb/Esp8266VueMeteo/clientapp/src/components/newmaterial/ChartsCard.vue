@@ -73,6 +73,9 @@ export default {
     chartHeight: {
       type: [String, Number],
       default: 350
+    },
+    chartData: {
+      type: Array
     }
   },
   computed: {
