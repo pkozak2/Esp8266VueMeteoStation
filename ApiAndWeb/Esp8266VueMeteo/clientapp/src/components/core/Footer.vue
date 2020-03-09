@@ -1,17 +1,39 @@
 <template>
-  <v-footer id="core-footer" absolute height="82">
-    <div class="footer-items">
-      <span v-for="link in links" :key="link.name">
-        <a :href="link.Link" class="tertiary--text footer-links">{{
-          link.name
-        }}</a>
-      </span>
-    </div>
-    <v-spacer />
-    <span class="font-weight-light copyright">
-      &copy;
-      {{ new Date().getFullYear() }}
-    </span>
+  <v-footer
+    color="primary"
+    padless
+  >
+    <v-row
+      justify="center"
+      no-gutters
+    >
+    <div v-for="link in links" :key="link.link">
+      <v-btn
+      v-if="!external(link.link)"
+        color="white"
+        text
+        rounded
+        class="my-2" :to="link.link"
+      >
+        {{ link.name }}
+      </v-btn>
+      <v-btn
+      v-if="external(link.link)"
+        color="white"
+        text
+        rounded
+        class="my-2" :href="link.link" target="_blank"
+      >
+        {{ link.name }}
+      </v-btn>
+      </div>
+      <v-col
+        class="primary lighten-1 py-4 text-center white--text"
+        cols="12"
+      >
+        &copy; {{ new Date().getFullYear() }}
+      </v-col>
+    </v-row>
   </v-footer>
 </template>
 
@@ -19,14 +41,20 @@
 export default {
   data: () => ({
     links: [
-      { name: "Home", Link: "/dashboard" }
+      { name: "Home", link: "/dashboard" },
       // {
       //   name: "Demo",
       //   Link: "https://github.com/pkozak2"
       // },
-      // { name: "GitHub", Link: "https://github.com/pkozak2" }
+       { name: "GitHub", link: "https://github.com/pkozak2" }
     ]
-  })
+  }),
+  methods:{
+    external(link){
+      if(!link) return false;
+      return link.startsWith("http://") || link.startsWith("https://");
+    }
+  }
 };
 </script>
 

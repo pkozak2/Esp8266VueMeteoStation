@@ -41,7 +41,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12">
+      <v-col cols="12" lg="8" offset-lg="2">
         <sensor-datatable
           :items="averageMeasurements"
           :loading="averageMeasurementsLoding"
@@ -49,7 +49,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12">
+      <v-col cols="12" lg="8" offset-lg="2">
         <charts-card title="Wykres dzienny" bottom></charts-card>
       </v-col>
     </v-row>

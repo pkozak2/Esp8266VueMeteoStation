@@ -18,7 +18,7 @@
           {{ item.value }}
         </v-chip>
       </template>
-      <template v-slot:item.percent="{ item }"> {{ item.percent }} % </template>
+      <template v-slot:item.percent="{ item }"> {{ item.percent }}% </template>
       <template v-slot:item.index="{ item }">
         {{ getIndexName(item.index) }}
       </template>

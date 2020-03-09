@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mt-4 mx-auto">
+  <v-card class="mt-4 mx-auto" :class="bottom ? 'mb-4' : '' ">
     <v-sheet
       :style="styles"
       class="mx-auto"
@@ -9,7 +9,7 @@
     >
       <slot></slot>
     </v-sheet>
-    <v-card-text :class="bottom ? 'pt-5' : 'pt-0'">
+    <v-card-text :class="bottom ? 'pt-5 pb-0' : 'pt-0'">
       <div class="title font-weight-light mb-2 text-center">{{ title }}</div>
       <div class="subheading font-weight-light grey--text">{{ subtitle }}</div>
       <v-divider class="my-2" v-if="showDivider"></v-divider>
