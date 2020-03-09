@@ -2,6 +2,7 @@
   <v-navigation-drawer
     :value="value"
     app
+    absolute
     v-on:input="$emit('input', $event)"
     :clipped="$vuetify.breakpoint.lgAndUp"
   >
