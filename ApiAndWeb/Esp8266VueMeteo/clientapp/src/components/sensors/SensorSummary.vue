@@ -40,9 +40,20 @@
         {{ GetDateFromDateTimeOffset(lastUpdate) }}
       </v-col>
     </v-row>
+    <v-divider />
     <v-row>
-      <v-col cols="12" class="text-center">
-        switch
+      <v-col cols="12">
+        <v-row>
+          <v-col class="text-center">Średnia z:</v-col>
+        </v-row>
+        <v-row>
+          <v-col class="text-center">
+            <v-btn-toggle v-model="averageFrom" mandatory color="primary">
+              <v-btn :value="1">1h</v-btn>
+              <v-btn :value="24">24h</v-btn>
+            </v-btn-toggle>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
     <v-row>
@@ -107,6 +118,11 @@ export default {
         ];
       }
     }
+  },
+  data() {
+    return {
+      averageFrom: 1
+    };
   },
   methods: {
     GetDateFromDateTimeOffset(data) {
