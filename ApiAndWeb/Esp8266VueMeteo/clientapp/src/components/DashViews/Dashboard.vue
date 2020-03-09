@@ -290,22 +290,20 @@ export default {
       }
     };
   },
+
   props: {
-    smog: {
-      type: String,
-      default: "smog"
-    }
+    deviceName: { type: String }
   },
   mounted() {
     this.GetMeasurements();
   },
   methods: {
     GetMeasurements() {
-      if (this.$route.name === "Dashboard1") {
+      if (this.$route.name === "UserDashAll") {
         measurementsService.GetUserDevices("pkozak").then(response => {
           this.sensors = response.data;
         });
-      } else {
+      } else if (this.deviceName === "smogowy") {
         measurementsService.GetDeviceMeasurements("6549084").then(response => {
           this.sensors = response.data;
         });

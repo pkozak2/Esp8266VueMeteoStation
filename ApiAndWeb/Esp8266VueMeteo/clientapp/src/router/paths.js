@@ -178,25 +178,30 @@ export default [
       requiresAuth: false
     },
     redirect: {
-      path: "/dashboard"
+      path: "/pkozak/smogowy"
     }
   },
   {
-    path: "/dashboard",
-    meta: {
-      name: "Dashboard view",
-      requiresAuth: false
-    },
+    path: "/:userName",
+    props: true,
     component: () => import("@/views/DashboardView.vue"),
     children: [
       {
         path: "",
-        name: "Dashboard",
+        name: "UserDash",
+        props: true,
         component: () => import("@/components/DashViews/NewDashboard.vue")
       },
       {
         path: "all",
-        name: "Dashboard1",
+        name: "UserDashAll",
+        props: true,
+        component: () => import("@/components/DashViews/Dashboard.vue")
+      },
+      {
+        path: ":deviceName",
+        name: "UserDeviceDash",
+        props: true,
         component: () => import("@/components/DashViews/Dashboard.vue")
       }
     ]
