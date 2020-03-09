@@ -5,7 +5,7 @@
     v-on:input="$emit('input', $event)"
     :clipped="$vuetify.breakpoint.lgAndUp"
   >
-    <v-list dense>
+    <v-list dense class="fill-height">
       <template v-for="item in items">
         <v-row v-if="item.heading" :key="item.heading" align="center">
           <v-col cols="6">

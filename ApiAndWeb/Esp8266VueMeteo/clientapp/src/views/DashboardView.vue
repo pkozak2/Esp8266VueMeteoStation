@@ -1,17 +1,15 @@
 <template>
-  <v-content>
-    <v-app id="dashboard-view" dark>
-      <Toolbar @toogle-drawer="drawer = !drawer" />
+  <v-container>
+    <Toolbar @toogle-drawer="drawer = !drawer" />
 
-      <Drawer v-model="drawer" />
-
+    <Drawer v-model="drawer" />
+    <v-content>
       <v-fade-transition mode="out-in">
         <router-view />
       </v-fade-transition>
-
-      <CFooter v-if="$route.name !== 'Maps'" />
-    </v-app>
-  </v-content>
+    </v-content>
+    <CFooter v-if="$route.name !== 'Maps'" />
+  </v-container>
 </template>
 
 <script>

@@ -1,11 +1,10 @@
 <template>
-  <main>
+  <v-app>
     <transition mode="out-in">
       <router-view />
     </transition>
-  </main>
+  </v-app>
 </template>
-
 <script>
 export default {
   name: "App",
@@ -15,6 +14,3 @@ export default {
   })
 };
 </script>
-
-<style lang="scss">
-</style>

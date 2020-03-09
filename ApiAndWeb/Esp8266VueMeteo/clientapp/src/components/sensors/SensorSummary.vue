@@ -41,6 +41,19 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col cols="12" class="text-center">
+        switch
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12" class="text-center">
+        Poziom zanieczyszczenia:
+        <v-chip class="indexchip" large>
+          wysoki
+        </v-chip>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col cols="12" lg="8" offset-lg="2">
         <sensor-datatable
           :items="averageMeasurements"
