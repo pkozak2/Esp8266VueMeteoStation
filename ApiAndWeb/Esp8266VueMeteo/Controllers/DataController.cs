@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace VueStartingProject.Controllers
 {
+    [Obsolete]
     [Route("api/[controller]")]
     public class DataController : Controller
     {
@@ -17,7 +18,7 @@ namespace VueStartingProject.Controllers
         [HttpGet("sensors")]
         public IActionResult GetSensors()
         {
-           return new JsonResult(_devicesService.GetAllDevices());
+            return new JsonResult(_devicesService.GetAllDevices());
         }
 
         [HttpGet("sensors/{userName}")]
@@ -27,7 +28,7 @@ namespace VueStartingProject.Controllers
         }
 
         [HttpGet("sensors/esp/{espId}")]
-            public IActionResult GetSensorsByEspId(string espId)
+        public IActionResult GetSensorsByEspId(string espId)
         {
             return new JsonResult(_devicesService.GetUserDevices(espId));
         }
@@ -42,12 +43,6 @@ namespace VueStartingProject.Controllers
         public IActionResult GetMeasurementsForDeviceFromHours(Guid deviceId, int hours)
         {
             return new JsonResult(_measurementsService.MeasurementsForDeviceFromHours(deviceId, hours));
-        }
-
-        [HttpGet("measurements/{deviceId}/data.json")]
-        public IActionResult GetCurrentDataJson(Guid deviceId)
-        {
-            return new JsonResult(_measurementsService.GetCurrentDataJson(deviceId));
         }
     }
 }

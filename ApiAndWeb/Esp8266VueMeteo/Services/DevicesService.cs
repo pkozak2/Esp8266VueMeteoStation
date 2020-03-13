@@ -1,4 +1,5 @@
 using Esp8266VueMeteo.Models.ApiModels;
+using Esp8266VueMeteo.Models.Base;
 using Esp8266VueMeteo.Repositories;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,6 +13,12 @@ namespace Esp8266VueMeteo.Services
         List<SensorModel> GetAllDevices();
         Guid? AuthorizeSensor(string deviceId, string httpContextUserName = null, string httpContextPassword = null);
         List<DataSensorModel> GetUserDevices(string deviceId = null);
+        SensorModel GetDeviceData(Guid deviceId);
+
+        //NEW
+        Guid? GetDeviceIdByNormalizedName(string normalizedName);
+        IEnumerable<SensorModel> GetUserDevices(Guid userId);
+        IEnumerable<SelectItem<string>> GetUserDevicesSelectModel(Guid userId);
     }
     public class DevicesService : IDevicesService
     {
@@ -62,6 +69,34 @@ namespace Esp8266VueMeteo.Services
                     } });
             }
             return result;
+        }
+
+        public SensorModel GetDeviceData(Guid deviceId)
+        {
+            var device = _devicessRepository.GetDeviceById(deviceId);
+            if (device == null) return null;
+            return new SensorModel() { SensorId = device.DeviceId, SensorDescription = device.Description, SensorDescritionExtra = device.ExtraDescription, SensorName = device.DeviceName };
+        }
+
+        public IEnumerable<SensorModel> GetUserDevices(Guid userId)
+        {
+            var devices = _devicessRepository.GetUserDevices(userId);
+
+            return devices.Select(s => new SensorModel() { SensorId = s.DeviceId, SensorDescription = s.Description, SensorDescritionExtra = s.ExtraDescription, SensorName = s.DeviceName });
+        }
+
+        public IEnumerable<SelectItem<string>> GetUserDevicesSelectModel(Guid userId)
+        {
+            var devices = _devicessRepository.GetUserDevices(userId);
+
+            return devices.Select(s => new SelectItem<string>() { Id = s.DeviceNormalizedName, Text = s.DeviceName });
+        }
+
+        public Guid? GetDeviceIdByNormalizedName(string normalizedName)
+        {
+            var device = _devicessRepository.GetDeviceByNormalizedName(normalizedName);
+            if (device == null) return null;
+            return device.DeviceId;
         }
     }
 }

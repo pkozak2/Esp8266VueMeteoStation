@@ -4,14 +4,16 @@ using Esp8266VueMeteo.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Esp8266VueMeteo.Database.Migrations
 {
     [DbContext(typeof(MeteoDbContext))]
-    partial class MeteoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200313150127_DeviceNormalizedName")]
+    partial class DeviceNormalizedName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

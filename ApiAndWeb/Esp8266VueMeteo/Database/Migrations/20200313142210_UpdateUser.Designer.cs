@@ -4,14 +4,16 @@ using Esp8266VueMeteo.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Esp8266VueMeteo.Database.Migrations
 {
     [DbContext(typeof(MeteoDbContext))]
-    partial class MeteoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200313142210_UpdateUser")]
+    partial class UpdateUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,12 +36,6 @@ namespace Esp8266VueMeteo.Database.Migrations
                     b.Property<string>("DeviceName")
                         .IsRequired()
                         .HasMaxLength(256);
-
-                    b.Property<string>("DeviceNormalizedName")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(256)
-                        .HasDefaultValue("");
 
                     b.Property<string>("Esp8266Id")
                         .IsRequired();
@@ -151,7 +147,7 @@ namespace Esp8266VueMeteo.Database.Migrations
 
                     b.Property<DateTime>("InsertDate")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2020, 3, 13, 16, 1, 27, 615, DateTimeKind.Local).AddTicks(3117));
+                        .HasDefaultValue(new DateTime(2020, 3, 13, 15, 22, 10, 163, DateTimeKind.Local).AddTicks(1814));
 
                     b.Property<DateTime?>("LastLoginDate");
 
@@ -163,9 +159,6 @@ namespace Esp8266VueMeteo.Database.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("UserId");
-
-                    b.HasIndex("Username")
-                        .IsUnique();
 
                     b.ToTable("Users");
                 });

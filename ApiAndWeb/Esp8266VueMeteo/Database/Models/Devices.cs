@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 
 namespace Esp8266VueMeteo.Database.Models
@@ -19,6 +18,10 @@ namespace Esp8266VueMeteo.Database.Models
         [Key]
         public Guid DeviceId { get; set; }
         [Required]
+        public Guid UserId { get; set; }
+        [Required]
+        public bool IsDefault { get; set; }
+        [Required]
         public string Esp8266Id { get; set; }
         [Required, MaxLength(256)]
         public string HttpUserName { get; set; }
@@ -26,6 +29,8 @@ namespace Esp8266VueMeteo.Database.Models
         public string HttpPassword { get; set; }
         [Required, MaxLength(256)]
         public string DeviceName { get; set; }
+        [Required, MaxLength(256)]
+        public string DeviceNormalizedName { get; set; }
         [Required, MaxLength(500)]
         public string Description { get; set; }
         [MaxLength(500)]
@@ -45,5 +50,9 @@ namespace Esp8266VueMeteo.Database.Models
         [JsonIgnore]
         [IgnoreDataMember]
         public ICollection<Measurements> Measurements { get; set; }
+
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public Users User { get; set; }
     }
 }

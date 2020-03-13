@@ -4,14 +4,16 @@ using Esp8266VueMeteo.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Esp8266VueMeteo.Database.Migrations
 {
     [DbContext(typeof(MeteoDbContext))]
-    partial class MeteoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200313141854_AddUser")]
+    partial class AddUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,12 +36,6 @@ namespace Esp8266VueMeteo.Database.Migrations
                     b.Property<string>("DeviceName")
                         .IsRequired()
                         .HasMaxLength(256);
-
-                    b.Property<string>("DeviceNormalizedName")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(256)
-                        .HasDefaultValue("");
 
                     b.Property<string>("Esp8266Id")
                         .IsRequired();
@@ -75,7 +71,7 @@ namespace Esp8266VueMeteo.Database.Migrations
 
                     b.Property<bool>("SendToAqiEco");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid?>("UserId");
 
                     b.HasKey("DeviceId");
 
@@ -151,9 +147,9 @@ namespace Esp8266VueMeteo.Database.Migrations
 
                     b.Property<DateTime>("InsertDate")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2020, 3, 13, 16, 1, 27, 615, DateTimeKind.Local).AddTicks(3117));
+                        .HasDefaultValue(new DateTime(2020, 3, 13, 15, 18, 54, 263, DateTimeKind.Local).AddTicks(9474));
 
-                    b.Property<DateTime?>("LastLoginDate");
+                    b.Property<DateTime>("LastLoginDate");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired();
@@ -164,9 +160,6 @@ namespace Esp8266VueMeteo.Database.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("Username")
-                        .IsUnique();
-
                     b.ToTable("Users");
                 });
 
@@ -174,8 +167,7 @@ namespace Esp8266VueMeteo.Database.Migrations
                 {
                     b.HasOne("Esp8266VueMeteo.Database.Models.Users", "User")
                         .WithMany("Devices")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Esp8266VueMeteo.Database.Models.JsonUpdates", b =>

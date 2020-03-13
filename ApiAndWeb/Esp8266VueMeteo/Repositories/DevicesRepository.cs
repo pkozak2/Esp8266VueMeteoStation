@@ -12,6 +12,8 @@ namespace Esp8266VueMeteo.Repositories
         List<Devices> GetAllActiveDevices();
         List<Devices> GetDevicesByEspId(string espId);
         Devices GetDeviceById(Guid deviceId);
+        List<Devices> GetUserDevices(Guid userId);
+        Devices GetDeviceByNormalizedName(string normalizedName);
     }
     public class DevicesRepository : IDevicesRepository
     {
@@ -59,6 +61,32 @@ namespace Esp8266VueMeteo.Repositories
             {
                 _logger.LogError(ex, "Error when GetdevicesByEspId");
                 return new List<Devices>();
+            }
+        }
+
+        public List<Devices> GetUserDevices(Guid userId)
+        {
+            try
+            {
+                return _context.Devices.Where(w => w.IsActive && w.UserId == userId).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error when GetUserDevices");
+                return new List<Devices>();
+            }
+        }
+
+        public Devices GetDeviceByNormalizedName(string normalizedName)
+        {
+            try
+            {
+                return _context.Devices.FirstOrDefault(d => d.DeviceNormalizedName == normalizedName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error when GetDeviceByNormalizedName");
+                return null;
             }
         }
     }

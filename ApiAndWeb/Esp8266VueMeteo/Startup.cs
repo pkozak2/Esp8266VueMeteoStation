@@ -40,11 +40,13 @@ namespace Esp8266VueMeteo
             services.AddTransient<IDevicesService, DevicesService>();
             services.AddTransient<IMeasurementsService, MeasurementsService>();
             services.AddTransient<IJsonUpdatesService, JsonUpdatesService>();
+            services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IAqiEcoService, AqiEcoService>();
 
             services.AddTransient<IDevicesRepository, DevicesRepository>();
             services.AddTransient<IMeasurementsRepository, MeasurementsRepository>();
             services.AddTransient<IJsonUpdatesRepository, JsonUpdatesRepository>();
+            services.AddTransient<IUsersRepository, UsersRepository>();
 
         }
 
