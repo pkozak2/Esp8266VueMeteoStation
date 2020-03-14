@@ -182,6 +182,13 @@ export default [
     }
   },
   {
+    path: "/dashboard",
+
+    redirect: {
+      path: "/pkozak/smogowy"
+    }
+  },
+  {
     path: "/:userName",
     props: true,
     component: () => import("@/views/DashboardView.vue"),
