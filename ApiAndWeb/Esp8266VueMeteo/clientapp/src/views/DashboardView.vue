@@ -1,8 +1,12 @@
 <template>
   <v-container>
-    <Toolbar @toogle-drawer="drawer = !drawer" :userName="userName" />
+    <Toolbar
+      @toogle-drawer="drawer = !drawer"
+      :userName="userName"
+      :deviceName="deviceName"
+    />
 
-    <Drawer v-model="drawer" />
+    <!-- <Drawer v-model="drawer" /> -->
     <v-content>
       <v-fade-transition mode="out-in">
         <router-view />
@@ -14,13 +18,14 @@
 
 <script>
 import Toolbar from "@/components/core/Toolbar";
-import Drawer from "@/components/core/Drawer";
+//import Drawer from "@/components/core/Drawer";
 import CFooter from "@/components/core/Footer";
 export default {
   name: "DashboardView",
-  components: { Toolbar, Drawer, CFooter },
+  components: { Toolbar, CFooter },
   props: {
-    userName: String
+    userName: String,
+    deviceName: String
   },
   data: () => ({
     drawer: false

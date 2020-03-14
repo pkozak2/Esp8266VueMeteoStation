@@ -5,15 +5,57 @@
     color="blue darken-3"
     dark
   >
-    <v-app-bar-nav-icon @click.stop="$emit('toogle-drawer')" />
-    <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
+    <!-- <v-app-bar-nav-icon @click.stop="$emit('toogle-drawer')" /> -->
+    <!-- <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
       <span class="hidden-sm-and-down">Meteo App</span>
-    </v-toolbar-title>
+    </!-->
     <v-spacer />
+    <v-btn
+      text
+      dark
+      exact
+      v-if="deviceName"
+      :to="{
+        name: 'UserDeviceDash',
+        params: { userName: userName, deviceName: deviceName }
+      }"
+    >
+      <v-icon class="hidden-md-and-up">fa-home</v-icon>
+      <span class="hidden-sm-and-down">Strona główna</span>
+    </v-btn>
+    <v-btn
+      text
+      dark
+      exact
+      v-if="deviceName"
+      :to="{
+        name: 'UserDeviceGraphs',
+        params: { userName: userName, deviceName: deviceName }
+      }"
+    >
+      <v-icon class="hidden-md-and-up">fa-chart-area</v-icon>
+      <span class="hidden-sm-and-down">Wykresy</span>
+    </v-btn>
+    <v-btn
+      text
+      dark
+      exact
+      v-if="deviceName"
+      :to="{
+        name: 'UserDeviceAnnualGraphs',
+        params: { userName: userName, deviceName: deviceName }
+      }"
+    >
+      <v-icon class="hidden-md-and-up">fa-chart-bar</v-icon>
+      <span class="hidden-sm-and-down">Statystyki roczne</span>
+    </v-btn>
     <v-menu offset-y v-if="userDevices[1]">
       <template v-slot:activator="{ on }">
         <v-btn text dark v-on="on">
-          Lokalizacje <v-icon class="pl-2">fa-chevron-down</v-icon>
+          <v-icon class="hidden-md-and-up">fa-globe-europe</v-icon>
+          <span class="hidden-sm-and-down"
+            >Lokalizacje <v-icon class="pl-2">fa-chevron-down</v-icon></span
+          >
         </v-btn>
       </template>
       <v-list>
@@ -54,6 +96,10 @@ export default {
   props: {
     userName: {
       type: String
+    },
+    deviceName: {
+      type: String,
+      default: ""
     }
   },
   data: () => {
