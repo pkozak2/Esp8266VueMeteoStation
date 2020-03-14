@@ -10,14 +10,14 @@ namespace Esp8266VueMeteo.Services
 {
     public interface IDevicesService
     {
-        List<SensorModel> GetAllDevices();
+        List<DeviceModel> GetAllDevices();
         Guid? AuthorizeSensor(string deviceId, string httpContextUserName = null, string httpContextPassword = null);
         List<DataSensorModel> GetUserDevices(string deviceId = null);
-        SensorModel GetDeviceData(Guid deviceId);
+        DeviceModel GetDeviceData(Guid deviceId);
 
         //NEW
         Guid? GetDeviceIdByNormalizedName(string normalizedName);
-        IEnumerable<SensorModel> GetUserDevices(Guid userId);
+        IEnumerable<DeviceModel> GetUserDevices(Guid userId);
         IEnumerable<SelectItem<string>> GetUserDevicesSelectModel(Guid userId);
     }
     public class DevicesService : IDevicesService
@@ -37,10 +37,10 @@ namespace Esp8266VueMeteo.Services
             return _devicessRepository.GetDevicesByEspId(deviceId).Where(w => w.HttpUserName == httpContextUserName && w.HttpPassword == httpContextPassword).FirstOrDefault()?.DeviceId;
         }
 
-        public List<SensorModel> GetAllDevices()
+        public List<DeviceModel> GetAllDevices()
         {
             var devices = _devicessRepository.GetAllActiveDevices();
-            return  devices.Select(s => new SensorModel() { SensorId = s.DeviceId, SensorDescription = s.Description, SensorDescritionExtra = s.ExtraDescription, SensorName = s.DeviceName }).ToList();
+            return  devices.Select(s => new DeviceModel() { DeviceId = s.DeviceId, DeviceDescription = s.Description, DeviceDescritionExtra = s.ExtraDescription, DeviceName = s.DeviceName }).ToList();
         }
 
         public List<DataSensorModel> GetUserDevices(string deviceId = null)
@@ -51,10 +51,10 @@ namespace Esp8266VueMeteo.Services
             foreach(var s in devices)
             {
                 var data = _measurementsRepository.CurrentMeasurementsForDevice(s.DeviceId);
-                result.Add(new DataSensorModel() { SensorId = s.DeviceId,
-                    SensorDescription = s.Description,
-                    SensorDescritionExtra = s.ExtraDescription,
-                    SensorName = s.DeviceName,
+                result.Add(new DataSensorModel() { DeviceId = s.DeviceId,
+                    DeviceDescription = s.Description,
+                    DeviceDescritionExtra = s.ExtraDescription,
+                    DeviceName = s.DeviceName,
                     Measurements = data == null ? new SensorMeasurementModel() : new SensorMeasurementModel() {
                         CellVoltage = data.CellVoltage,
                         HeaterHumidity = data.HeaterHumidity,
@@ -71,18 +71,18 @@ namespace Esp8266VueMeteo.Services
             return result;
         }
 
-        public SensorModel GetDeviceData(Guid deviceId)
+        public DeviceModel GetDeviceData(Guid deviceId)
         {
             var device = _devicessRepository.GetDeviceById(deviceId);
             if (device == null) return null;
-            return new SensorModel() { SensorId = device.DeviceId, SensorDescription = device.Description, SensorDescritionExtra = device.ExtraDescription, SensorName = device.DeviceName };
+            return new DeviceModel() { DeviceId = device.DeviceId, DeviceDescription = device.Description, DeviceDescritionExtra = device.ExtraDescription, DeviceName = device.DeviceName };
         }
 
-        public IEnumerable<SensorModel> GetUserDevices(Guid userId)
+        public IEnumerable<DeviceModel> GetUserDevices(Guid userId)
         {
             var devices = _devicessRepository.GetUserDevices(userId);
 
-            return devices.Select(s => new SensorModel() { SensorId = s.DeviceId, SensorDescription = s.Description, SensorDescritionExtra = s.ExtraDescription, SensorName = s.DeviceName });
+            return devices.Select(s => new DeviceModel() { DeviceId = s.DeviceId, DeviceDescription = s.Description, DeviceDescritionExtra = s.ExtraDescription, DeviceName = s.DeviceName });
         }
 
         public IEnumerable<SelectItem<string>> GetUserDevicesSelectModel(Guid userId)

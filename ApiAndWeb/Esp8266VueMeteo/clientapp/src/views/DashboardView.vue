@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <Toolbar @toogle-drawer="drawer = !drawer" />
+    <Toolbar @toogle-drawer="drawer = !drawer" :userName="userName" />
 
     <Drawer v-model="drawer" />
     <v-content>
@@ -19,6 +19,9 @@ import CFooter from "@/components/core/Footer";
 export default {
   name: "DashboardView",
   components: { Toolbar, Drawer, CFooter },
+  props: {
+    userName: String
+  },
   data: () => ({
     drawer: false
   }),

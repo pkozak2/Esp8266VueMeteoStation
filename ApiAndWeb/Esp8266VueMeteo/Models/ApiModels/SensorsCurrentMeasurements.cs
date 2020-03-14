@@ -2,7 +2,7 @@
 {
     public class SensorsCurrentMeasurements
     {
-        public SensorModel Sensor { get; set; }
+        public DeviceModel Sensor { get; set; }
         public SensorMeasurementModel Measurements { get; set; }
     }
 }

@@ -190,7 +190,7 @@ export default [
         path: "",
         name: "UserDash",
         props: true,
-        component: () => import("@/components/DashViews/NewDashboard.vue")
+        component: () => import("@/components/DashViews/Redirect.vue")
       },
       {
         path: "all",
@@ -202,7 +202,7 @@ export default [
         path: ":deviceName",
         name: "UserDeviceDash",
         props: true,
-        component: () => import("@/components/DashViews/Dashboard.vue")
+        component: () => import("@/components/DashViews/NewDashboard.vue")
       },
       {
         path: ":deviceName/graphs",

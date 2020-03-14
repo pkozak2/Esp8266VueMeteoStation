@@ -1,6 +1,17 @@
 <template>
-  <BaseCard v-bind="$attrs" class="v-card--material-chart" v-on="$listeners" v-if="chartHasData">
-    <v-card slot="offset" :class="`elevation-${elevation}`" :color="color" class="pa-4" dark>
+  <BaseCard
+    v-bind="$attrs"
+    class="v-card--material-chart"
+    v-on="$listeners"
+    v-if="chartHasData"
+  >
+    <v-card
+      slot="offset"
+      :class="`elevation-${elevation}`"
+      :color="color"
+      class="pa-4"
+      dark
+    >
       <LineChart :chartData="chartData" :options="options" v-if="chartData" />
     </v-card>
     <slot></slot>
@@ -27,7 +38,7 @@ export default {
   },
   computed: {
     chartHasData() {
-      return !!this.chartData.labels[0];
+      return !!(this.chartData || {}).labels;
     }
   }
 };

@@ -1,11 +1,9 @@
 ﻿<template>
-    <div>Redirection!</div>
+  <div>Redirection!</div>
 </template>
 <script>
-    export default {
-        name: "redirect",
-        mounted() {
-            location.replace('http://pkozak2.aqi.eco');
-        }
-    }
+export default {
+  name: "redirect",
+  mounted() {}
+};
 </script>

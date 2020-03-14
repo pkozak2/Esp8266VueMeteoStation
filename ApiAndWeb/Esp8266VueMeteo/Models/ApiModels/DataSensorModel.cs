@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Esp8266VueMeteo.Models.ApiModels
 {
-    public class DataSensorModel : SensorModel
+    public class DataSensorModel : DeviceModel
     {
         public SensorMeasurementModel Measurements { get; set; }
     }

@@ -1,21 +1,22 @@
 <template>
   <v-container>
-    UName: {{ userName }}
-    <sensor-summary></sensor-summary>
+    <sensor-summary
+      :userName="userName"
+      :deviceNormalizedName="deviceName"
+    ></sensor-summary>
   </v-container>
 </template>
 <script>
-import SensorSummary from "../../components/sensors/SensorSummary.vue";
+import SensorSummary from "@/components/sensors/SensorSummary.vue";
 export default {
   name: "newDashboard",
   components: { SensorSummary },
   props: {
-    userName: { type: String }
+    userName: { type: String },
+    deviceName: { type: String }
   },
-  created() {
-    if (this.userName == "dashboard") {
-      this.$router.push({ path: "/pkozak/smogowy" });
-    }
+  data: () => {
+    return {};
   }
 };
 </script>

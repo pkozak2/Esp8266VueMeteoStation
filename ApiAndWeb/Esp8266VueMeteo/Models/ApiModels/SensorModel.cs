@@ -2,12 +2,12 @@
 
 namespace Esp8266VueMeteo.Models.ApiModels
 {
-    public class SensorModel
+    public class DeviceModel
     {
-        public Guid SensorId { get; set; }
-        public string SensorName { get; set; }
-        public string SensorDescription { get; set; }
-        public string SensorDescritionExtra { get; set; }
+        public Guid DeviceId { get; set; }
+        public string DeviceName { get; set; }
+        public string DeviceDescription { get; set; }
+        public string DeviceDescritionExtra { get; set; }
 
     }
 }

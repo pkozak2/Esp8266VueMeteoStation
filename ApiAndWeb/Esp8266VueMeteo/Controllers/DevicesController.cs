@@ -12,10 +12,12 @@ namespace Esp8266VueMeteo.Controllers
     public class DevicesController : ControllerBase
     {
         private readonly IDevicesService _devicesService;
-        
-        public DevicesController(IDevicesService devicesService)
+        private readonly IMeasurementsService _measurementsService;
+
+        public DevicesController(IDevicesService devicesService, IMeasurementsService measurementsService)
         {
             _devicesService = devicesService;
+            _measurementsService = measurementsService;
         }
         [HttpGet]
         public IActionResult Index()
@@ -23,14 +25,23 @@ namespace Esp8266VueMeteo.Controllers
             return Ok("Hello from devices!");
         }
 
-        [HttpGet("{deviceId}")]
-        public IActionResult GetDeviceDetails(Guid deviceId)
+
+
+        [HttpGet("{deviceId}/data")]
+        public IActionResult GetDeviceCurrentData(Guid deviceId)
         {
-            var device = _devicesService.GetDeviceData(deviceId);
+            var device = _measurementsService.CurrentMeasurementsForDevice(deviceId);
             if (device == null) return NotFound();
             return Ok(device);
         }
-        
+
+        [HttpGet("{deviceId}/averages")]
+        public IActionResult GetDeviceAverages(Guid deviceId)
+        {
+            var device = _measurementsService.AverageMeasurementsForDevice(deviceId);
+            if (device == null) return NotFound();
+            return Ok(device);
+        }
 
 
     }

@@ -5,7 +5,7 @@
         <v-row>
           <v-col cols="12" align="center">
             <v-row>
-              <v-col>{{ sensor.sensorName }}</v-col>
+              <v-col>{{ sensor.deviceName }}</v-col>
             </v-row>
             <v-row>
               <v-col>
@@ -128,7 +128,7 @@
             />
           </v-col>
         </v-row>
-        <v-row :v-if="IsGraphsDataContainsDevice(sensor.sensorId)">
+        <v-row :v-if="IsGraphsDataContainsDevice(sensor.deviceId)">
           <v-col cols="12">
             <v-row justify="center">
               <v-btn-toggle v-model="toggle_exclusive" mandatory>
@@ -141,7 +141,7 @@
                 <ChartsCard
                   :chartData="
                     GetChartData(
-                      sensor.sensorId,
+                      sensor.deviceId,
                       'temperature',
                       'Temperatura (°C)'
                     )
@@ -174,7 +174,7 @@
                 <ChartsCard
                   :chartData="
                     GetChartData(
-                      sensor.sensorId,
+                      sensor.deviceId,
                       'pressureHpa',
                       'Ciśnienie hPa'
                     )
@@ -190,7 +190,7 @@
               <v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
                 <ChartsCard
                   :chartData="
-                    GetChartData(sensor.sensorId, 'humidity', 'Wilgotność')
+                    GetChartData(sensor.deviceId, 'humidity', 'Wilgotność')
                   "
                   :options="chartOptions"
                 >
@@ -202,7 +202,7 @@
               </v-col>
               <v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
                 <ChartsCard
-                  :chartData="GetChartData(sensor.sensorId, 'pm25', 'PM2.5')"
+                  :chartData="GetChartData(sensor.deviceId, 'pm25', 'PM2.5')"
                   :options="chartOptions"
                 >
                   <h3 class="title font-weight-light">Pm2.5</h3>
@@ -213,7 +213,7 @@
               </v-col>
               <v-col cols="12" sm="5" md="6" lg="4" xl="4" pa-2>
                 <ChartsCard
-                  :chartData="GetChartData(sensor.sensorId, 'pm10', 'PM10')"
+                  :chartData="GetChartData(sensor.deviceId, 'pm10', 'PM10')"
                   :options="chartOptions"
                 >
                   <h3 class="title font-weight-light">Pm10</h3>
@@ -325,16 +325,16 @@ export default {
       if (this.IsGraphsDataContainsDevice(deviceId)) {
         Vue.set(
           this.graphsData,
-          this.graphsData.findIndex(f => f.sensorId === deviceId),
-          { sensorId: deviceId, data: data }
+          this.graphsData.findIndex(f => f.deviceId === deviceId),
+          { deviceId: deviceId, data: data }
         );
       } else {
-        this.graphsData.push({ sensorId: deviceId, data: data });
+        this.graphsData.push({ deviceId: deviceId, data: data });
       }
     },
     IsGraphsDataContainsDevice(deviceId) {
       for (var i = 0; i < this.graphsData.length; i++) {
-        if (this.graphsData[i].sensorId == deviceId) {
+        if (this.graphsData[i].deviceId == deviceId) {
           return true;
         }
       }
@@ -342,7 +342,7 @@ export default {
     },
     GetChartData(deviceId, chartType, title) {
       var index = this.graphsData.findIndex(function(val) {
-        return val.sensorId == deviceId;
+        return val.deviceId == deviceId;
       });
       if (index == -1) return;
 
@@ -359,7 +359,7 @@ export default {
         });
       }
       var chart = {
-        labels: hours,
+        labels: hours || [],
         datasets: [
           {
             label: title,
@@ -376,7 +376,7 @@ export default {
   watch: {
     sensors(val) {
       val.forEach(element => {
-        this.GetSensorHistoryFromHours(element.sensorId);
+        this.GetSensorHistoryFromHours(element.deviceId);
       });
     },
     toggle_exclusive(val) {
@@ -384,7 +384,7 @@ export default {
     },
     sensorHistoryHours() {
       this.sensors.forEach(element => {
-        this.GetSensorHistoryFromHours(element.sensorId);
+        this.GetSensorHistoryFromHours(element.deviceId);
       });
     }
   }

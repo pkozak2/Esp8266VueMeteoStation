@@ -46,10 +46,10 @@ export default {
       type: String
     },
     value: {
-      type: String
+      type: [String, Number]
     },
     smallValue: {
-      type: String
+      type: [String, Number]
     },
     description: {
       type: String

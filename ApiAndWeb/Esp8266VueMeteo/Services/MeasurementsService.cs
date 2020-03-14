@@ -17,6 +17,7 @@ namespace Esp8266VueMeteo.Services
         SensorMeasurementModel CurrentMeasurementsForDevice(Guid deviceId);
         List<SensorMeasurementModel> MeasurementsForDeviceFromHours(Guid deviceId, int hours);
         DataJsonModel GetCurrentDataJson(Guid deviceId);
+        AveragesModel AverageMeasurementsForDevice(Guid deviceId);
     }
     public class MeasurementsService : IMeasurementsService
     {
@@ -49,6 +50,76 @@ namespace Esp8266VueMeteo.Services
 
             return _measurementsRepository.AddSensorMeasurement(deviceId, measurement.Pm25, measurement.Pm10,
                 measurement.Temperature, measurement.Humidity, measurement.Pressure, measurement.HeaterTemperature, measurement.HeaterHumidity, measurement.WifiRssi, measurement.CellVoltage);
+
+        }
+
+        public AveragesModel AverageMeasurementsForDevice(Guid deviceId)
+        {
+            var result = new AveragesModel();
+            var measurements = MeasurementsForDeviceFromHours(deviceId, 24).OrderBy(o => o.InsertDate);
+
+            var last1h = measurements.Where(w => w.InsertDate >= DateTimeOffset.Now.AddHours(-1));
+            if (last1h.Any())
+            {
+                var averagePm25 = last1h.Where(w => w.Pm25 != null).Average(a => a.Pm25);
+                var averagePm10 = last1h.Where(w => w.Pm10 != null).Average(a => a.Pm10);
+
+                if (averagePm10 != null || averagePm25 != null)
+                {
+
+                    var percentpm25 = Math.Round(100 * ((averagePm25 ?? 0) / AirQualityHelper.PM25Limit1h), 0);
+                    var percentpm10 = Math.Round(100 * ((averagePm10 ?? 0) / AirQualityHelper.PM10Limit1h), 0);
+
+                    result.Average_1h.Add(new AverageDataModel()
+                    {
+                        Name = "PM",
+                        SubName = "2.5",
+                        Value = averagePm25.HasValue ? Math.Round(averagePm25.Value, 0) : (double?)null,
+                        Percent = (int)percentpm25,
+                        Index = AirQualityHelper.FindLevel(AirQualityHelper.PM25Thresholds1h, averagePm25).Index
+                    });
+
+                    result.Average_1h.Add(new AverageDataModel()
+                    {
+                        Name = "PM",
+                        SubName = "10",
+                        Value = averagePm10.HasValue ? Math.Round(averagePm10.Value, 0) : (double?)null,
+                        Percent = (int)percentpm10,
+                        Index = AirQualityHelper.FindLevel(AirQualityHelper.PM10Thresholds1h, averagePm10).Index
+                    });
+                }
+            }
+            if (measurements.Any())
+            {
+                var averagePm25 = measurements.Where(w => w.Pm25 != null).Average(a => a.Pm25);
+                var averagePm10 = measurements.Where(w => w.Pm10 != null).Average(a => a.Pm10);
+                if (averagePm10 != null || averagePm25 != null)
+                {
+
+                    var percentpm25 = Math.Round(100 * ((averagePm25 ?? 0) / AirQualityHelper.PM25Limit24h), 0);
+                    var percentpm10 = Math.Round(100 * ((averagePm10 ?? 0) / AirQualityHelper.PM10Limit24h), 0);
+
+
+                    result.Average_24h.Add(new AverageDataModel()
+                    {
+                        Name = "PM",
+                        SubName = "2.5",
+                        Value = averagePm25.HasValue ? Math.Round(averagePm25.Value, 0) : (double?)null,
+                        Percent = (int)percentpm25,
+                        Index = AirQualityHelper.FindLevel(AirQualityHelper.PM25Thresholds24h, averagePm25).Index
+                    });
+
+                    result.Average_24h.Add(new AverageDataModel()
+                    {
+                        Name = "PM",
+                        SubName = "10",
+                        Value = averagePm10.HasValue ? Math.Round(averagePm10.Value, 0) : (double?)null,
+                        Percent = (int)percentpm10,
+                        Index = AirQualityHelper.FindLevel(AirQualityHelper.PM10Thresholds24h, averagePm10).Index
+                    });
+                }
+            }
+            return result;
 
         }
 

@@ -7,18 +7,18 @@ namespace Esp8266VueMeteo.Helpers
 {
     public static class AirQualityHelper
     {
-        public static string[] PollutionLevels = { "Very good", "Good", "Moderate", "Sufficient", "Bad", "Very Bad" };
+        public static string[] PollutionLevels = { "Very low", "Low", "Medium", "High", "Very high"};
 
-        public static int[] PM10Thresholds1h = { 0, 20, 50, 80, 110, 150 };
-        public static int[] PM10Thresholds24h = { 0, 15, 30, 50, 100, 120 };
+        public static int[] PM10Thresholds1h = { 0, 25, 50, 90, 180 };
+        public static int[] PM10Thresholds24h = { 0, 15, 30, 50, 100 };
 
         
         public static int PM10Threshold1y = 40;
         public static int PM10DailyThreshold1y = 50;
         public static int PM10DaysAboveThreshold = 31;
 
-        public static int[] PM25Thresholds1h = { 0, 13, 35, 55, 75, 110 };
-        public static int[] PM25Thresholds24h = { 0, 10, 20, 30, 40, 60 };
+        public static int[] PM25Thresholds1h = { 0, 15, 30, 55, 110 };
+        public static int[] PM25Thresholds24h = { 0, 10, 20, 30, 60 };
 
         public static int PM25DailyThreshold1y = 30;
 
