@@ -17,7 +17,8 @@ namespace Esp8266VueMeteo.Services
         SensorMeasurementModel CurrentMeasurementsForDevice(Guid deviceId);
         List<SensorMeasurementModel> MeasurementsForDeviceFromHours(Guid deviceId, int hours);
         DataJsonModel GetCurrentDataJson(Guid deviceId);
-        AveragesModel AverageMeasurementsForDevice(Guid deviceId);
+        IEnumerable<AverageDataModel> AverageMeasurementsForDevice(Guid deviceId, int hours);
+        PollutonLevelGraphData AveragePollutionsForDeviceGraph(Guid deviceId, int days);
     }
     public class MeasurementsService : IMeasurementsService
     {
@@ -53,69 +54,55 @@ namespace Esp8266VueMeteo.Services
 
         }
 
-        public AveragesModel AverageMeasurementsForDevice(Guid deviceId)
+        public IEnumerable<AverageDataModel> AverageMeasurementsForDevice(Guid deviceId, int hours)
         {
-            var result = new AveragesModel();
-            var measurements = MeasurementsForDeviceFromHours(deviceId, 24).OrderBy(o => o.InsertDate);
+            var result = new List<AverageDataModel>();
+            var measurements = MeasurementsForDeviceFromHours(deviceId, hours).OrderBy(o => o.InsertDate);
 
-            var last1h = measurements.Where(w => w.InsertDate >= DateTimeOffset.Now.AddHours(-1));
-            if (last1h.Any())
-            {
-                var averagePm25 = last1h.Where(w => w.Pm25 != null).Average(a => a.Pm25);
-                var averagePm10 = last1h.Where(w => w.Pm10 != null).Average(a => a.Pm10);
-
-                if (averagePm10 != null || averagePm25 != null)
-                {
-
-                    var percentpm25 = Math.Round(100 * ((averagePm25 ?? 0) / AirQualityHelper.PM25Limit1h), 0);
-                    var percentpm10 = Math.Round(100 * ((averagePm10 ?? 0) / AirQualityHelper.PM10Limit1h), 0);
-
-                    result.Average_1h.Add(new AverageDataModel()
-                    {
-                        Name = "PM",
-                        SubName = "2.5",
-                        Value = averagePm25.HasValue ? Math.Round(averagePm25.Value, 0) : (double?)null,
-                        Percent = (int)percentpm25,
-                        Index = AirQualityHelper.FindLevel(AirQualityHelper.PM25Thresholds1h, averagePm25).Index
-                    });
-
-                    result.Average_1h.Add(new AverageDataModel()
-                    {
-                        Name = "PM",
-                        SubName = "10",
-                        Value = averagePm10.HasValue ? Math.Round(averagePm10.Value, 0) : (double?)null,
-                        Percent = (int)percentpm10,
-                        Index = AirQualityHelper.FindLevel(AirQualityHelper.PM10Thresholds1h, averagePm10).Index
-                    });
-                }
-            }
             if (measurements.Any())
             {
                 var averagePm25 = measurements.Where(w => w.Pm25 != null).Average(a => a.Pm25);
                 var averagePm10 = measurements.Where(w => w.Pm10 != null).Average(a => a.Pm10);
+
                 if (averagePm10 != null || averagePm25 != null)
                 {
+                    var pm25Limit = 0;
+                    var pm10Limit = 0;
+                    int[] pm25Thresholds;
+                    int[] pm10Thresholds;
+                    if (hours == 1)
+                    {
+                        pm25Limit = AirQualityHelper.PM25Limit1h;
+                        pm10Limit = AirQualityHelper.PM10Limit1h;
+                        pm25Thresholds = AirQualityHelper.PM25Thresholds1h;
+                        pm10Thresholds = AirQualityHelper.PM10Thresholds1h;
+                    } else
+                    {
+                        pm25Limit = AirQualityHelper.PM25Limit24h;
+                        pm10Limit = AirQualityHelper.PM10Limit24h;
+                        pm25Thresholds = AirQualityHelper.PM25Thresholds24h;
+                        pm10Thresholds = AirQualityHelper.PM10Thresholds24h;
+                    }
 
-                    var percentpm25 = Math.Round(100 * ((averagePm25 ?? 0) / AirQualityHelper.PM25Limit24h), 0);
-                    var percentpm10 = Math.Round(100 * ((averagePm10 ?? 0) / AirQualityHelper.PM10Limit24h), 0);
+                    var percentpm25 = Math.Round(100 * ((averagePm25 ?? 0) / pm25Limit), 0);
+                    var percentpm10 = Math.Round(100 * ((averagePm10 ?? 0) / pm10Limit), 0);
 
-
-                    result.Average_24h.Add(new AverageDataModel()
+                    result.Add(new AverageDataModel()
                     {
                         Name = "PM",
                         SubName = "2.5",
                         Value = averagePm25.HasValue ? Math.Round(averagePm25.Value, 0) : (double?)null,
                         Percent = (int)percentpm25,
-                        Index = AirQualityHelper.FindLevel(AirQualityHelper.PM25Thresholds24h, averagePm25).Index
+                        Index = AirQualityHelper.FindLevel(pm25Thresholds, averagePm25).Index
                     });
 
-                    result.Average_24h.Add(new AverageDataModel()
+                    result.Add(new AverageDataModel()
                     {
                         Name = "PM",
                         SubName = "10",
                         Value = averagePm10.HasValue ? Math.Round(averagePm10.Value, 0) : (double?)null,
                         Percent = (int)percentpm10,
-                        Index = AirQualityHelper.FindLevel(AirQualityHelper.PM10Thresholds24h, averagePm10).Index
+                        Index = AirQualityHelper.FindLevel(pm10Thresholds, averagePm10).Index
                     });
                 }
             }
@@ -228,6 +215,21 @@ namespace Esp8266VueMeteo.Services
                     InsertDate = data.InsertDateTime
                 });
             }
+
+            return result;
+        }
+
+
+        public PollutonLevelGraphData AveragePollutionsForDeviceGraph(Guid deviceId, int days)
+        {
+            var result = new PollutonLevelGraphData();
+            result.Pm25Limit = days == 1 ? AirQualityHelper.PM25Limit1h : AirQualityHelper.PM25Limit24h;
+            result.Pm10Limit = days == 1 ? AirQualityHelper.PM10Limit1h : AirQualityHelper.PM10Limit24h;
+
+            var measurements = MeasurementsForDeviceFromHours(deviceId, days * 24);
+
+            result.Pm25Data.AddRange(measurements.Where(w => w.Pm25 != null).Select(s => new GraphDataModel() { DateTime = s.InsertDate, Value = s.Pm25 }));
+            result.Pm10Data.AddRange(measurements.Where(w => w.Pm10 != null).Select(s => new GraphDataModel() { DateTime = s.InsertDate, Value = s.Pm10 }));
 
             return result;
         }

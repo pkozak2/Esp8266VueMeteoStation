@@ -1,13 +1,9 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="12" class="title text-center"
-        >{{ deviceName }}
-        <v-progress-circular
-          indeterminate
-          v-if="!deviceName"
-          color="primary"
-        ></v-progress-circular>
+      <v-col cols="12" class="title text-center">
+        {{ deviceName }}
+        <v-progress-circular indeterminate v-if="!deviceName" color="primary"></v-progress-circular>
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -47,7 +43,7 @@
       </v-col>
     </v-row>
     <v-divider />
-    <v-row v-if="hasAverages">
+    <v-row v-if="hasAverages || averageMeasurementsLoading">
       <v-col cols="12">
         <v-row>
           <v-col class="text-center">Średnia z:</v-col>
@@ -64,15 +60,17 @@
     </v-row>
     <v-row>
       <v-col cols="12" lg="8" offset-lg="2">
-        <sensor-datatable
-          :items="averageMeasurements"
-          :loading="averageMeasurementsLoading"
-        ></sensor-datatable>
+        <sensor-datatable :items="averageMeasurements" :loading="averageMeasurementsLoading"></sensor-datatable>
       </v-col>
     </v-row>
     <v-row>
       <v-col cols="12" lg="8" offset-lg="2">
-        <charts-card title="Wykres dzienny" bottom></charts-card>
+        <SensorPollutionGraph
+          :dataLoading="averageMeasurementsLoading"
+          :chartData="averagePollutionGraphData"
+          title="Wykres dzienny"
+          bottom
+        ></SensorPollutionGraph>
       </v-col>
     </v-row>
   </v-container>
@@ -85,13 +83,13 @@ const defaultMeasurements = {
 };
 import moment from "moment";
 import StatsCard from "@/components/newmaterial/StatsCard.vue";
-import ChartsCard from "@/components/newmaterial/ChartsCard.vue";
+import SensorPollutionGraph from "./SensorPollutionGraph";
 import SensorDatatable from "@/components/newmaterial/SensorDatatable.vue";
 import UserSerivce from "../../services/UserService";
 import DevicesService from "../../services/DevicesService";
 export default {
   name: "SensorSummary",
-  components: { ChartsCard, StatsCard, SensorDatatable },
+  components: { SensorPollutionGraph, StatsCard, SensorDatatable },
   props: {
     deviceNormalizedName: {
       type: String
@@ -108,20 +106,14 @@ export default {
       lastUpdate: null,
       currentMeasurements: defaultMeasurements,
       averageMeasurementsLoading: false,
-      averageObject: {}
+      averageMeasurements: [],
+      averagePollutionGraphData: {},
+      averagePollutionGraphDataLoading: false
     };
   },
   computed: {
     hasAverages() {
       return !!this.averageMeasurements && this.averageMeasurements[0];
-    },
-    averageMeasurements() {
-      if (this.averageFrom == 1) {
-        return (this.averageObject || {}).average_1h;
-      } else if (this.averageFrom == 24) {
-        return (this.averageObject || {}).average_24h;
-      }
-      return [];
     }
   },
   methods: {
@@ -154,12 +146,26 @@ export default {
     },
     GetAverages() {
       this.averageMeasurementsLoading = true;
-      this.averageObject = {};
-      DevicesService.GetAverages(this.deviceId).then(response => {
-        var data = response.data;
-        this.averageObject = data;
-        this.averageMeasurementsLoading = false;
-      });
+      this.averageMeasurements = [];
+      DevicesService.GetAverages(this.deviceId, this.averageFrom).then(
+        response => {
+          var data = response.data;
+          this.averageMeasurements = data;
+          this.averageMeasurementsLoading = false;
+        }
+      );
+    },
+    GetPollutionGraphData() {
+      this.averagePollutionGraphData = {};
+      this.averagePollutionGraphDataLoading = true;
+      var days = this.averageFrom == 1 ? 1 : 7;
+      DevicesService.GetPollutionGraphData(this.deviceId, days).then(
+        response => {
+          var data = response.data;
+          this.averagePollutionGraphData = data;
+          this.averagePollutionGraphDataLoading = false;
+        }
+      );
     }
   },
   mounted() {
@@ -173,6 +179,11 @@ export default {
     deviceId() {
       this.GetCurrentMeasurements();
       this.GetAverages();
+      this.GetPollutionGraphData();
+    },
+    averageFrom() {
+      this.GetAverages();
+      this.GetPollutionGraphData();
     }
   }
 };

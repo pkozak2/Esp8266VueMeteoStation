@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-col v-if="items[0]">
+    <v-col v-if="items[0] || loading">
       <v-col cols="12" class="text-center">
         Poziom zanieczyszczenia:
         <v-chip
@@ -8,11 +8,12 @@
           :color="getColor(maxPollutionLevel)"
           :dark="maxPollutionLevel === 0 || maxPollutionLevel === 4"
         >
-          {{ getIndexName(maxPollutionLevel) }}
+          <span v-if="!loading">{{ getIndexName(maxPollutionLevel) }}</span>
+          <v-progress-circular v-if="loading" color="primary" indeterminate></v-progress-circular>
         </v-chip>
       </v-col>
     </v-col>
-    <v-card class="mt-4 mx-auto" v-if="items[0]">
+    <v-card class="mt-4 mx-auto" v-if="items[0] || loading">
       <v-data-table
         hide-default-footer
         :headers="headers"
@@ -21,22 +22,20 @@
         :loading="loading"
       >
         <template v-slot:item.name="{ item }">
-          {{ item.name }}<sub>{{ item.subName }}</sub>
+          {{ item.name }}
+          <sub>{{ item.subName }}</sub>
         </template>
         <template v-slot:item.value="{ item }">
-          <v-chip
-            :color="getColor(item.index)"
-            :dark="item.index === 0 || item.index === 4"
-          >
-            {{ item.value }}<small>&nbsp;µg/m<sup>3</sup></small>
+          <v-chip :color="getColor(item.index)" :dark="item.index === 0 || item.index === 4">
+            {{ item.value }}
+            <small>
+              &nbsp;µg/m
+              <sup>3</sup>
+            </small>
           </v-chip>
         </template>
-        <template v-slot:item.percent="{ item }">
-          {{ item.percent }}%
-        </template>
-        <template v-slot:item.index="{ item }">
-          {{ getIndexName(item.index) }}
-        </template>
+        <template v-slot:item.percent="{ item }">{{ item.percent }}%</template>
+        <template v-slot:item.index="{ item }">{{ getIndexName(item.index) }}</template>
       </v-data-table>
     </v-card>
   </div>

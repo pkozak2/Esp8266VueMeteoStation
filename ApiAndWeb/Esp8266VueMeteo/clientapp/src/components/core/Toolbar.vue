@@ -1,10 +1,5 @@
 <template>
-  <v-app-bar
-    :clipped-left="$vuetify.breakpoint.lgAndUp"
-    app
-    color="blue darken-3"
-    dark
-  >
+  <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="blue darken-3" dark>
     <!-- <v-app-bar-nav-icon @click.stop="$emit('toogle-drawer')" /> -->
     <!-- <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
       <span class="hidden-sm-and-down">Meteo App</span>
@@ -53,9 +48,10 @@
       <template v-slot:activator="{ on }">
         <v-btn text dark v-on="on">
           <v-icon class="hidden-md-and-up">fa-globe-europe</v-icon>
-          <span class="hidden-sm-and-down"
-            >Lokalizacje <v-icon class="pl-2">fa-chevron-down</v-icon></span
-          >
+          <span class="hidden-sm-and-down">
+            Lokalizacje
+            <v-icon class="pl-2">fa-chevron-down</v-icon>
+          </span>
         </v-btn>
       </template>
       <v-list>
@@ -86,7 +82,7 @@
           src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
           alt="Vuetify"
       /></v-avatar>
-    </v-btn> -->
+    </v-btn>-->
   </v-app-bar>
 </template>
 <script>
@@ -122,12 +118,23 @@ export default {
         this.$router.currentRoute.name !== "UserDeviceDash" &&
         this.$router.currentRoute.name !== "UserDashAll"
       ) {
-        this.$router
-          .push({
-            name: "UserDeviceDash",
-            params: { deviceName: this.userDevices[0].id }
-          })
-          .catch(() => {});
+        var defaultDevice = this.userDevices.filter(item => {
+          return item.isDefault;
+        });
+        if (defaultDevice[0]) {
+          this.$router
+            .push({
+              name: "UserDeviceDash",
+              params: { deviceName: defaultDevice[0].id }
+            })
+            .catch(() => {});
+        } else {
+          this.$router
+            .push({
+              name: "UserDashAll"
+            })
+            .catch(() => {});
+        }
       }
     }
   }

@@ -2,13 +2,18 @@
   <div v-if="chartHasData">
     <OffsetCard v-bind="$attrs">
       <LineChart
+        v-if="!dataLoading"
         class="pa-5"
         v-bind="$attrs"
         :styles="chartStyles"
         :chartData="chartData"
         :options="optionsLocal"
       />
+      <span v-if="dataLoading">
+        <v-progress-linear indeterminate height="15" color="secondary"></v-progress-linear>
+      </span>
     </OffsetCard>
+    {{optionsLocal}}
   </div>
 </template>
 <script>
@@ -76,6 +81,9 @@ export default {
     },
     chartData: {
       type: Array
+    },
+    dataLoading: {
+      type: Boolean
     }
   },
   computed: {

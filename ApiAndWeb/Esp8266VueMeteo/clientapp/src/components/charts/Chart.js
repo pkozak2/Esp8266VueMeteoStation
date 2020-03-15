@@ -1,9 +1,13 @@
 import { Line, mixins } from "vue-chartjs";
+// eslint-disable-next-line
+import chartjsPluginAnnotation from "chartjs-plugin-annotation";
+
+const { reactiveProp } = mixins;
 
 export default {
   name: "chart",
   extends: Line,
-  mixins: [mixins.reactiveProp],
+  mixins: reactiveProp,
   props: {
     chartData: {
       type: Object,
@@ -21,5 +25,11 @@ export default {
   },
   mounted() {
     this.renderChart(this.chartData, this.options);
+  },
+  watch: {
+    options() {
+      console.log(this.options);
+      this.renderChart(this.chartData, this.options);
+    }
   }
 };

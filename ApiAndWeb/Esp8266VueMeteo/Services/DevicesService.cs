@@ -18,7 +18,7 @@ namespace Esp8266VueMeteo.Services
         //NEW
         Guid? GetDeviceIdByNormalizedName(string normalizedName);
         IEnumerable<DeviceModel> GetUserDevices(Guid userId);
-        IEnumerable<SelectItem<string>> GetUserDevicesSelectModel(Guid userId);
+        IEnumerable<DefaultSelectItem<string>> GetUserDevicesSelectModel(Guid userId);
     }
     public class DevicesService : IDevicesService
     {
@@ -85,11 +85,11 @@ namespace Esp8266VueMeteo.Services
             return devices.Select(s => new DeviceModel() { DeviceId = s.DeviceId, DeviceDescription = s.Description, DeviceDescritionExtra = s.ExtraDescription, DeviceName = s.DeviceName });
         }
 
-        public IEnumerable<SelectItem<string>> GetUserDevicesSelectModel(Guid userId)
+        public IEnumerable<DefaultSelectItem<string>> GetUserDevicesSelectModel(Guid userId)
         {
             var devices = _devicessRepository.GetUserDevices(userId);
 
-            return devices.Select(s => new SelectItem<string>() { Id = s.DeviceNormalizedName, Text = s.DeviceName });
+            return devices.Select(s => new DefaultSelectItem<string>() { Id = s.DeviceNormalizedName, Text = s.DeviceName, IsDefault = s.IsDefault });
         }
 
         public Guid? GetDeviceIdByNormalizedName(string normalizedName)

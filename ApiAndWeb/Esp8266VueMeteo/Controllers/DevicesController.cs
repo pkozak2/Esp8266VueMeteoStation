@@ -35,14 +35,21 @@ namespace Esp8266VueMeteo.Controllers
             return Ok(device);
         }
 
-        [HttpGet("{deviceId}/averages")]
-        public IActionResult GetDeviceAverages(Guid deviceId)
+        [HttpGet("{deviceId}/averages/{hours}")]
+        public IActionResult GetDeviceAverages(Guid deviceId, int hours)
         {
-            var device = _measurementsService.AverageMeasurementsForDevice(deviceId);
+            var device = _measurementsService.AverageMeasurementsForDevice(deviceId, hours);
             if (device == null) return NotFound();
             return Ok(device);
         }
 
+        [HttpGet("{deviceId}/averages/pollution/{days}")]
+        public IActionResult GetDevicePollutionGraphData(Guid deviceId, int days)
+        {
+            var device = _measurementsService.AveragePollutionsForDeviceGraph(deviceId, days);
+            if (device == null) return NotFound();
+            return Ok(device);
+        }
 
     }
 }
