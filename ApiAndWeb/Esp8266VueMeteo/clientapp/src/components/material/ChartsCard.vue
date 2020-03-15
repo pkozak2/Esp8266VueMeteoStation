@@ -19,7 +19,7 @@
   </BaseCard>
 </template>
 <script>
-import LineChart from "@/components/charts/Chart.js";
+import LineChart from "@/components/charts/Chart.vue";
 import BaseCard from "./BaseCard";
 export default {
   components: { BaseCard, LineChart },

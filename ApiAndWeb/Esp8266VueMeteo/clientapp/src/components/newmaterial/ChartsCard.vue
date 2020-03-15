@@ -10,14 +10,18 @@
         :options="optionsLocal"
       />
       <span v-if="dataLoading">
-        <v-progress-linear indeterminate height="15" color="secondary"></v-progress-linear>
+        <v-progress-linear
+          indeterminate
+          height="15"
+          color="secondary"
+        ></v-progress-linear>
       </span>
     </OffsetCard>
-    {{optionsLocal}}
+    <pre>{{ optionsLocal }}</pre>
   </div>
 </template>
 <script>
-import LineChart from "@/components/charts/Chart.js";
+import LineChart from "@/components/charts/Chart.vue";
 import OffsetCard from "./OffsetCard.vue";
 const defaultChartOptions = {
   spanGaps: false,
@@ -80,7 +84,10 @@ export default {
       default: 350
     },
     chartData: {
-      type: Array
+      type: Object,
+      default: function() {
+        return {};
+      }
     },
     dataLoading: {
       type: Boolean
@@ -89,8 +96,8 @@ export default {
   computed: {
     optionsLocal() {
       return {
-        ...this.options,
-        ...defaultChartOptions
+        ...defaultChartOptions,
+        ...this.options
       };
     },
     chartStyles() {
