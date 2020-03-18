@@ -1,40 +1,22 @@
 <template>
   <div>
     <charts-card
-      v-if="!loading"
       v-bind="graphAttrs"
       :options="graphOptions"
       :chartData="dataSets"
     ></charts-card>
-    {{ dataSets }}
-    <!-- <pre>{{ chartData }}</pre> -->
+    datasets: {{ dataSets }}
+    <pre>{{ chartData }}</pre>
   </div>
 </template>
 <script>
-const graphOptionsDefault = {
-  annotation: {
-    annotations: []
-  },
-  scales: {
-    yAxes: [
-      {
-        display: true,
-        scaleLabel: {
-          display: false
-        },
-        ticks: {
-          fontColor: "white",
-          suggestedMin: 0,
-          suggestedMax: 60
-        }
-      }
-    ]
-  }
-};
+import moment from "moment";
 import ChartsCard from "../../components/newmaterial/ChartsCard";
+import graphMixin from "../../mixins/graphMixin";
 export default {
   name: "SensorPollutionGraph",
   components: { ChartsCard },
+  mixins: [graphMixin],
   props: {
     chartData: {
       type: Object
@@ -43,61 +25,50 @@ export default {
   data() {
     return {
       loading: true,
-      dataSets: {},
-      graphOptions: graphOptionsDefault
+      dataSets: { datasets: [] }
     };
   },
   computed: {
     graphAttrs() {
       const { title, bottom, dataLoading } = this.$attrs;
       return { title, bottom, dataLoading };
+    },
+    graphOptions() {
+      return this.generateChartOption("pm");
     }
   },
   watch: {
     chartData(val) {
       if (Object.keys(val).length === 0) return;
-      this.loading = true;
-      this.graphOptions.annotation.annotations = [];
-      if ((this.chartData || {}).pm25Limit) {
-        this.graphOptions.annotation.annotations.push(
-          this.GenerateAnnotation(
-            (this.chartData || {}).pm25Limit,
-            "PM₂₅ limit",
-            "purple"
-          )
-        );
-      }
-      if ((this.chartData || {}).pm10Limit) {
-        this.graphOptions.annotation.annotations.push(
-          this.GenerateAnnotation(
-            (this.chartData || {}).pm10Limit,
-            "PM₁₀ limit",
-            "orange"
-          )
-        );
-      }
-      // if ((this.chartData || {}).pm10Data) {
-      //   console.log("t");
+      debugger;
+      this.fillData();
+      // if (val.pm25Data[0]) {
+      //   this.dataSets.datasets.push(
+      //     this.GenerateDataset(val.pm25Data, "PM₂₅ (µg/m³)", "purple", "red")
+      //   );
       // }
-      this.loading = false;
     }
   },
   methods: {
-    GenerateAnnotation(value, text, color) {
-      return {
-        type: "line",
-        mode: "horizontal",
-        scaleID: "y-axis-0",
-        value: value,
-        borderColor: color,
-        borderWidth: 1,
-        label: {
-          content: text,
-          enabled: true,
-          position: "left",
-          backgroundColor: "rgba(0,0,0,0.3)"
-        }
+    fillData() {
+      this.dataSets = {
+        labels: [this.getRandomInt(), this.getRandomInt()],
+        datasets: [
+          {
+            label: "Data One",
+            backgroundColor: "#f87979",
+            data: [this.getRandomInt(), this.getRandomInt()]
+          },
+          {
+            label: "Data One",
+            backgroundColor: "#f87979",
+            data: [this.getRandomInt(), this.getRandomInt()]
+          }
+        ]
       };
+    },
+    getRandomInt() {
+      return Math.floor(Math.random() * (50 - 5 + 1)) + 5;
     },
     GenerateDataset(values, label, color, borderColor) {
       console.log(values, label, color, borderColor);
@@ -105,14 +76,17 @@ export default {
         backgroundColor: "purple",
         borderColor: "red",
         label: "PM₂₅ (µg/m³)",
-        data: values,
+        data: [this.getRandomInt(), this.getRandomInt()], //this.MapToChartTimeSeries(values),
         borderWidth: 1
       };
     },
     MapToChartTimeSeries(data) {
       console.log(data);
-      var series = [];
-      return series;
+      console.log("moment: ", moment());
+      return { t: moment(), y: 10 };
+      // return data.map(item => {
+      //   return { t: moment(item.dateTime), y: item.value };
+      // });
     }
   }
 };

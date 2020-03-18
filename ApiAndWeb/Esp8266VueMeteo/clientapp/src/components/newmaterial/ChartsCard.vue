@@ -7,7 +7,7 @@
         v-bind="$attrs"
         :styles="chartStyles"
         :chartData="chartData"
-        :options="optionsLocal"
+        :options="options"
       />
       <span v-if="dataLoading">
         <v-progress-linear
@@ -17,58 +17,12 @@
         ></v-progress-linear>
       </span>
     </OffsetCard>
-    <pre>{{ optionsLocal }}</pre>
   </div>
 </template>
 <script>
 import LineChart from "@/components/charts/Chart.vue";
 import OffsetCard from "./OffsetCard.vue";
-const defaultChartOptions = {
-  spanGaps: false,
-  aspectRatio: 2,
-  responsive: true,
-  maintainAspectRatio: false,
-  tooltips: {
-    mode: "index",
-    intersect: false
-  },
-  legend: {
-    labels: {
-      fontColor: "white"
-    }
-  },
-  scales: {
-    xAxes: [
-      {
-        display: true,
-        type: "time",
-        time: {
-          displayFormats: {
-            millisecond: "HH:mm:ss.SSS",
-            second: "HH:mm:ss",
-            minute: "HH:mm",
-            hour: "HH"
-          },
-          tooltipFormat: "DD-MM HH:mm"
-        },
-        ticks: { fontColor: "white" }
-      }
-    ],
-    yAxes: [
-      {
-        ticks: { fontColor: "white" }
-      }
-    ]
-  },
-  elements: {
-    point: {
-      radius: 0
-    }
-  },
-  scaleLabel: {
-    display: false
-  }
-};
+
 export default {
   name: "ChartsCard",
   components: { OffsetCard, LineChart },
@@ -94,12 +48,6 @@ export default {
     }
   },
   computed: {
-    optionsLocal() {
-      return {
-        ...defaultChartOptions,
-        ...this.options
-      };
-    },
     chartStyles() {
       return {
         position: "relative",

@@ -57,9 +57,9 @@ namespace Esp8266VueMeteo.Services
         public IEnumerable<AverageDataModel> AverageMeasurementsForDevice(Guid deviceId, int hours)
         {
             var result = new List<AverageDataModel>();
-            var measurements = MeasurementsForDeviceFromHours(deviceId, hours).OrderBy(o => o.InsertDate);
+            var measurements = MeasurementsForDeviceFromHours(deviceId, hours);
 
-            if (measurements.Any())
+            if (measurements != null && measurements.Any())
             {
                 var averagePm25 = measurements.Where(w => w.Pm25 != null).Average(a => a.Pm25);
                 var averagePm10 = measurements.Where(w => w.Pm10 != null).Average(a => a.Pm10);
