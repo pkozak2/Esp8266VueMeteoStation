@@ -1,5 +1,5 @@
 <template>
-  <div v-if="chartHasData">
+  <div :style="!chartHasData ? 'display: none' : ''">
     <OffsetCard v-bind="$attrs">
       <LineChart
         v-if="!dataLoading"
@@ -55,10 +55,7 @@ export default {
       };
     },
     chartHasData() {
-      return true;
-      // return (
-      //   !!(this.chartData || {}).labels && !!(this.chartData || {}).datasets
-      // );
+      return !!(this.chartData || {}).datasets[0];
     }
   }
 };

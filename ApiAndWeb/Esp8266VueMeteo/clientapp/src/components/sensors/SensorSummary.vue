@@ -3,7 +3,11 @@
     <v-row>
       <v-col cols="12" class="title text-center">
         {{ deviceName }}
-        <v-progress-circular indeterminate v-if="!deviceName" color="primary"></v-progress-circular>
+        <v-progress-circular
+          indeterminate
+          v-if="!deviceName"
+          color="primary"
+        ></v-progress-circular>
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -60,7 +64,10 @@
     </v-row>
     <v-row>
       <v-col cols="12" lg="8" offset-lg="2">
-        <sensor-datatable :items="averageMeasurements" :loading="averageMeasurementsLoading"></sensor-datatable>
+        <sensor-datatable
+          :items="averageMeasurements"
+          :loading="averageMeasurementsLoading"
+        ></sensor-datatable>
       </v-col>
     </v-row>
     <v-row>
@@ -173,7 +180,6 @@ export default {
   },
   watch: {
     deviceNormalizedName(val) {
-      console.log("vv: ", val);
       this.GetDeviceDetails(val);
     },
     deviceId() {

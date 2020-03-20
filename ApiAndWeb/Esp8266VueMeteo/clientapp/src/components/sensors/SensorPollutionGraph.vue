@@ -5,8 +5,6 @@
       :options="graphOptions"
       :chartData="dataSets"
     ></charts-card>
-    datasets: {{ dataSets }}
-    <pre>{{ chartData }}</pre>
   </div>
 </template>
 <script>
@@ -39,54 +37,50 @@ export default {
   },
   watch: {
     chartData(val) {
-      if (Object.keys(val).length === 0) return;
-      debugger;
-      this.fillData();
-      // if (val.pm25Data[0]) {
-      //   this.dataSets.datasets.push(
-      //     this.GenerateDataset(val.pm25Data, "PM₂₅ (µg/m³)", "purple", "red")
-      //   );
-      // }
+      if (Object.keys(val).length === 0) {
+        this.dataSets = { datasets: [] };
+        return;
+      }
+      var localDatasets = [];
+      if (val.pm25Data[0]) {
+        localDatasets.push(
+          this.GenerateDataset(
+            val.pm25Data,
+            "PM₂₅ (µg/m³)",
+            "rgb(153, 102, 255)",
+            "rgb(255, 99, 132)"
+          )
+        );
+      }
+      if (val.pm10Data[0]) {
+        localDatasets.push(
+          this.GenerateDataset(
+            val.pm10Data,
+            "PM₁₀ (µg/m³)",
+            "rgb(255, 159, 64)",
+            "rgb(255, 99, 132)"
+          )
+        );
+      }
+      this.dataSets = {
+        datasets: localDatasets
+      };
     }
   },
   methods: {
-    fillData() {
-      this.dataSets = {
-        labels: [this.getRandomInt(), this.getRandomInt()],
-        datasets: [
-          {
-            label: "Data One",
-            backgroundColor: "#f87979",
-            data: [this.getRandomInt(), this.getRandomInt()]
-          },
-          {
-            label: "Data One",
-            backgroundColor: "#f87979",
-            data: [this.getRandomInt(), this.getRandomInt()]
-          }
-        ]
-      };
-    },
-    getRandomInt() {
-      return Math.floor(Math.random() * (50 - 5 + 1)) + 5;
-    },
     GenerateDataset(values, label, color, borderColor) {
-      console.log(values, label, color, borderColor);
       return {
-        backgroundColor: "purple",
-        borderColor: "red",
-        label: "PM₂₅ (µg/m³)",
-        data: [this.getRandomInt(), this.getRandomInt()], //this.MapToChartTimeSeries(values),
+        backgroundColor: color,
+        borderColor: borderColor,
+        label: label,
+        data: this.MapToChartTimeSeries(values),
         borderWidth: 1
       };
     },
     MapToChartTimeSeries(data) {
-      console.log(data);
-      console.log("moment: ", moment());
-      return { t: moment(), y: 10 };
-      // return data.map(item => {
-      //   return { t: moment(item.dateTime), y: item.value };
-      // });
+      return data.map(item => {
+        return { t: moment(item.dateTime).toDate(), y: item.value };
+      });
     }
   }
 };
