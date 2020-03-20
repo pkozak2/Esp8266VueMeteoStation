@@ -23,17 +23,18 @@ export default {
   data() {
     return {
       loading: true,
-      dataSets: { datasets: [] }
+      dataSets: { datasets: [] },
+      graphOptions: {}
     };
   },
   computed: {
     graphAttrs() {
       const { title, bottom, dataLoading } = this.$attrs;
       return { title, bottom, dataLoading };
-    },
-    graphOptions() {
-      return this.generateChartOption("pm");
     }
+    // graphOptions() {
+    //   return this.generateChartOption("pm");
+    // }
   },
   watch: {
     chartData(val) {
@@ -65,6 +66,11 @@ export default {
       this.dataSets = {
         datasets: localDatasets
       };
+
+      this.graphOptions = this.generateChartOption("pm", {
+        min: val.fromDate,
+        max: val.toDate
+      });
     }
   },
   methods: {

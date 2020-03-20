@@ -29,7 +29,8 @@ const defaultChartOptions = {
             millisecond: "HH:mm:ss.SSS",
             second: "HH:mm:ss",
             minute: "HH:mm",
-            hour: "HH"
+            hour: "HH",
+            day: "D MMMM"
           },
           tooltipFormat: "DD-MM HH:mm"
         },
@@ -49,7 +50,8 @@ const defaultChartOptions = {
   },
   scaleLabel: {
     display: false
-  }
+  },
+  time: {}
 };
 
 const defaultPMoptions = {
@@ -83,6 +85,12 @@ function generatePMgraphOptions(options) {
       }
     }
   ];
+  if (localOptions.min) {
+    localChartOptions.time.min = moment(localOptions.min).toDate();
+  }
+  if (localOptions.max) {
+    localChartOptions.time.max = moment(localOptions.max).toDate();
+  }
   localChartOptions.annotation.annotations.push({
     type: "line",
     mode: "horizontal",
@@ -115,7 +123,7 @@ function generatePMgraphOptions(options) {
 
   return localChartOptions;
 }
-
+import moment from "moment";
 export default {
   methods: {
     generateChartOption(graphType, options) {
