@@ -6,8 +6,8 @@ namespace Esp8266VueMeteo.Models.ApiModels
 {
     public class PollutonLevelGraphData
     {
-        public DateTimeOffset? FromDate => Pm10Data.FirstOrDefault().DateTime ?? Pm25Data.FirstOrDefault().DateTime;
-        public DateTimeOffset? ToDate => Pm10Data.LastOrDefault().DateTime ?? Pm25Data.LastOrDefault().DateTime;
+        public DateTimeOffset? FromDate => Pm10Data.FirstOrDefault()?.DateTime ?? Pm25Data.FirstOrDefault()?.DateTime;
+        public DateTimeOffset? ToDate => Pm10Data.LastOrDefault()?.DateTime ?? Pm25Data.LastOrDefault()?.DateTime;
         public int Pm25Limit { get; set; }
         public int Pm10Limit { get; set; }
         public List<GraphDataModel> Pm10Data { get; set; }

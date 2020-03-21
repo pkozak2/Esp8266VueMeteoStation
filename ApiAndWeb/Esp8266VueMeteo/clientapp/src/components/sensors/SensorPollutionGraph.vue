@@ -1,6 +1,7 @@
 <template>
   <div>
     <charts-card
+      :data-loading="loading"
       v-bind="graphAttrs"
       :options="graphOptions"
       :chartData="dataSets"
@@ -38,6 +39,7 @@ export default {
   },
   watch: {
     chartData(val) {
+      this.loading = true;
       if (Object.keys(val).length === 0) {
         this.dataSets = { datasets: [] };
         return;
@@ -63,14 +65,15 @@ export default {
           )
         );
       }
-      this.dataSets = {
-        datasets: localDatasets
-      };
-
       this.graphOptions = this.generateChartOption("pm", {
         min: val.fromDate,
         max: val.toDate
       });
+      this.dataSets = {
+        datasets: localDatasets
+      };
+
+      this.loading = false;
     }
   },
   methods: {

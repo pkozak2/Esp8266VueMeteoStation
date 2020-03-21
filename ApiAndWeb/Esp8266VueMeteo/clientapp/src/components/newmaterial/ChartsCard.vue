@@ -1,21 +1,16 @@
 <template>
-  <div :style="!chartHasData ? 'display: none' : ''">
+  <div v-if="chartHasData">
     <OffsetCard v-bind="$attrs">
+      <span v-if="dataLoading">
+        <v-progress-linear indeterminate color="secondary"></v-progress-linear>
+      </span>
       <LineChart
-        v-if="!dataLoading"
         class="pa-5"
         v-bind="$attrs"
         :styles="chartStyles"
         :chartData="chartData"
         :options="options"
       />
-      <span v-if="dataLoading">
-        <v-progress-linear
-          indeterminate
-          height="15"
-          color="secondary"
-        ></v-progress-linear>
-      </span>
     </OffsetCard>
   </div>
 </template>
@@ -55,7 +50,7 @@ export default {
       };
     },
     chartHasData() {
-      return !!(this.chartData || {}).datasets[0];
+      return this.dataLoading || !!(this.chartData || {}).datasets[0];
     }
   }
 };
