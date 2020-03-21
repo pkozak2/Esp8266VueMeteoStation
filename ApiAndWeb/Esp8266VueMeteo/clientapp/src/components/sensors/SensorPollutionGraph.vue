@@ -25,7 +25,7 @@ export default {
     return {
       loading: true,
       dataSets: { datasets: [] },
-      graphOptions: {}
+      graphOptions: this.generateChartOption()
     };
   },
   computed: {
@@ -33,9 +33,6 @@ export default {
       const { title, bottom, dataLoading } = this.$attrs;
       return { title, bottom, dataLoading };
     }
-    // graphOptions() {
-    //   return this.generateChartOption("pm");
-    // }
   },
   watch: {
     chartData(val) {
