@@ -9,12 +9,17 @@
           :dark="maxPollutionLevel === 0 || maxPollutionLevel === 4"
         >
           <span v-if="!loading">{{ getIndexName(maxPollutionLevel) }}</span>
-          <v-progress-circular v-if="loading" color="primary" indeterminate></v-progress-circular>
+          <v-progress-circular
+            v-if="loading"
+            color="primary"
+            indeterminate
+          ></v-progress-circular>
         </v-chip>
       </v-col>
     </v-col>
     <v-card class="mt-4 mx-auto" v-if="items[0] || loading">
       <v-data-table
+        disable-sort
         hide-default-footer
         :headers="headers"
         :items="items"
@@ -26,7 +31,10 @@
           <sub>{{ item.subName }}</sub>
         </template>
         <template v-slot:item.value="{ item }">
-          <v-chip :color="getColor(item.index)" :dark="item.index === 0 || item.index === 4">
+          <v-chip
+            :color="getColor(item.index)"
+            :dark="item.index === 0 || item.index === 4"
+          >
             {{ item.value }}
             <small>
               &nbsp;µg/m
@@ -35,7 +43,9 @@
           </v-chip>
         </template>
         <template v-slot:item.percent="{ item }">{{ item.percent }}%</template>
-        <template v-slot:item.index="{ item }">{{ getIndexName(item.index) }}</template>
+        <template v-slot:item.index="{ item }">{{
+          getIndexName(item.index)
+        }}</template>
       </v-data-table>
     </v-card>
   </div>
@@ -122,3 +132,8 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+::v-deep .v-data-table-header-mobile {
+  display: none;
+}
+</style>
