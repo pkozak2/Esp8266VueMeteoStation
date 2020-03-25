@@ -25,7 +25,7 @@ namespace Esp8266VueMeteo.Services
         public void SaveUpdate(Guid deviceId, string jsonUpdate)
         {
             _logger.LogInformation($"save update JSON sensor: {deviceId}");
-            _repository.SaveUpdate(deviceId, jsonUpdate);
+            _repository.CreateJsonUpdate(deviceId, jsonUpdate);
         }
     }
 }
