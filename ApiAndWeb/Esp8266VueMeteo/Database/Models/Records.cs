@@ -1,16 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace Esp8266VueMeteo.Database.Models
 {
     public class Records
     {
+        public Records()
+        {
+            RecordId = Guid.NewGuid();
+            InsertDateTime = DateTimeOffset.Now;
+        }
         [Key]
+        public Guid RecordId { get; set; }
+        [Required]
         public Guid DeviceId { get; set; }
-        [Key]
+        [Required]
         public DateTimeOffset InsertDateTime { get; set; }
         public double? Pm25 { get; set; }
         public double? Pm10 { get; set; }
@@ -20,5 +26,9 @@ namespace Esp8266VueMeteo.Database.Models
         public double? Pressure { get; set; }
         public double? HeaterTemperature { get; set; }
         public double? HeaterHumidity { get; set; }
+
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public Devices Device { get; set; }
     }
 }
