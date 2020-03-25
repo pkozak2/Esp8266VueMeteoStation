@@ -22,6 +22,7 @@ namespace Esp8266VueMeteo.Database
             //base.OnModelCreating(modelBuilder);
         }
 
+        public DbSet<Aggregates> Aggregates { get; set;t }
         public DbSet<Devices> Devices { get; set; }
         public DbSet<Measurements> Measurements { get; set; }
         public DbSet<JsonUpdates> JsonUpdates { get; set; }
