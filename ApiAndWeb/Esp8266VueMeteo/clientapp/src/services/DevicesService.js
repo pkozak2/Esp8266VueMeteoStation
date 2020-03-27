@@ -9,5 +9,8 @@ export default {
   },
   GetPollutionGraphData(deviceId, days) {
     return axios.get(`${apiUrl}/${deviceId}/averages/pollution/${days}`);
+  },
+  GetTemperatureGraphData(deviceId, days) {
+    return axios.get(`${apiUrl}/${deviceId}/averages/temperature/${days}`);
   }
 };

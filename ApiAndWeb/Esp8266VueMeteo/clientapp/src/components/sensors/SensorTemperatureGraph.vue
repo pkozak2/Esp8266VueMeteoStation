@@ -3,7 +3,7 @@
     <charts-card
       :data-loading="loading"
       v-bind="graphAttrs"
-      :options="graphOptions"
+      :options="graphOptions1"
       :chartData="dataSets"
     ></charts-card>
   </div>
@@ -25,7 +25,7 @@ export default {
     return {
       loading: true,
       dataSets: { datasets: [] },
-      graphOptions: this.generateChartOption()
+      graphOptions1: this.generateChartOption()
     };
   },
   computed: {
@@ -42,30 +42,26 @@ export default {
         return;
       }
       var localDatasets = [];
-      if (val.pm25Data[0]) {
+      debugger;
+      if (val.temperatureData[0]) {
         localDatasets.push(
           this.GenerateDataset(
-            val.pm25Data,
-            "PM₂₅ (µg/m³)",
-            "rgb(153, 102, 255)",
+            val.temperatureData,
+            "Temperatura (°C)",
             "rgb(255, 99, 132)"
           )
         );
       }
-      if (val.pm10Data[0]) {
+      if (val.heaterData[0]) {
         localDatasets.push(
           this.GenerateDataset(
-            val.pm10Data,
-            "PM₁₀ (µg/m³)",
-            "rgb(255, 159, 64)",
-            "rgb(255, 99, 132)"
+            val.heaterData,
+            "Temperatura detektora (°C)",
+            "rgba(255, 99, 132, 0.5)",
+            true
           )
         );
       }
-      this.graphOptions = this.generateChartOption("temperature", {
-        min: val.fromDate,
-        max: val.toDate
-      });
       this.dataSets = {
         datasets: localDatasets
       };
@@ -74,13 +70,14 @@ export default {
     }
   },
   methods: {
-    GenerateDataset(values, label, color, borderColor) {
+    GenerateDataset(values, label, borderColor, hidden) {
       return {
-        backgroundColor: color,
         borderColor: borderColor,
         label: label,
         data: this.MapToChartTimeSeries(values),
-        borderWidth: 1
+        borderWidth: 2,
+        fill: false,
+        hidden: hidden || false
       };
     },
     MapToChartTimeSeries(data) {

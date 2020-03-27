@@ -1,58 +1,59 @@
 export const defaultDataSet = {
   datasets: []
 };
-
-const defaultChartOptions = {
-  spanGaps: false,
-  aspectRatio: 2,
-  responsive: true,
-  maintainAspectRatio: false,
-  tooltips: {
-    mode: "index",
-    intersect: false
-  },
-  legend: {
-    labels: {
-      fontColor: "white"
-    }
-  },
-  annotation: {
-    annotations: []
-  },
-  scales: {
-    xAxes: [
-      {
-        display: true,
-        type: "time",
-        time: {
-          displayFormats: {
-            millisecond: "HH:mm:ss.SSS",
-            second: "HH:mm:ss",
-            minute: "HH:mm",
-            hour: "HH",
-            day: "D MMMM"
+function getDefaultChartOptions() {
+  return {
+    spanGaps: false,
+    aspectRatio: 2,
+    responsive: true,
+    maintainAspectRatio: false,
+    tooltips: {
+      mode: "index",
+      intersect: false
+    },
+    legend: {
+      labels: {
+        fontColor: "white"
+      }
+    },
+    annotation: {
+      annotations: []
+    },
+    scales: {
+      xAxes: [
+        {
+          display: true,
+          type: "time",
+          time: {
+            displayFormats: {
+              millisecond: "HH:mm:ss.SSS",
+              second: "HH:mm:ss",
+              minute: "HH:mm",
+              hour: "HH",
+              day: "D MMMM"
+            },
+            tooltipFormat: "DD-MM HH:mm"
           },
-          tooltipFormat: "DD-MM HH:mm"
-        },
-        ticks: { fontColor: "white" }
+          ticks: { fontColor: "white" }
+        }
+      ],
+      yAxes: [
+        {
+          ticks: { fontColor: "white" }
+        }
+      ]
+    },
+    elements: {
+      point: {
+        radius: 0
       }
-    ],
-    yAxes: [
-      {
-        ticks: { fontColor: "white" }
-      }
-    ]
-  },
-  elements: {
-    point: {
-      radius: 0
-    }
-  },
-  scaleLabel: {
-    display: false
-  },
-  time: {}
-};
+    },
+    scaleLabel: {
+      display: false
+    },
+    time: {}
+  };
+}
 
 const defaultPMoptions = {
   pm25: {
@@ -68,7 +69,8 @@ const defaultPMoptions = {
 };
 
 function generatePMgraphOptions(options) {
-  var localChartOptions = Object.assign({}, defaultChartOptions);
+  console.log(options, defaultPMoptions);
+  var localChartOptions = Object.assign({}, getDefaultChartOptions());
 
   var localOptions = { ...defaultPMoptions, ...options };
 
@@ -127,11 +129,12 @@ import moment from "moment";
 export default {
   methods: {
     generateChartOption(graphType, options) {
+      debugger;
       switch (graphType) {
         case "pm":
           return generatePMgraphOptions(options);
         default:
-          return defaultChartOptions;
+          return getDefaultChartOptions();
       }
     }
   }
