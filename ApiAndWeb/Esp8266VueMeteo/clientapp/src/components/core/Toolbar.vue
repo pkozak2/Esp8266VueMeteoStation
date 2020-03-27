@@ -1,5 +1,10 @@
 <template>
-  <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="blue darken-3" dark>
+  <v-app-bar
+    :clipped-left="$vuetify.breakpoint.lgAndUp"
+    app
+    color="blue darken-3"
+    dark
+  >
     <!-- <v-app-bar-nav-icon @click.stop="$emit('toogle-drawer')" /> -->
     <!-- <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
       <span class="hidden-sm-and-down">Meteo App</span>
@@ -9,10 +14,10 @@
       text
       dark
       exact
-      v-if="deviceName"
+      v-if="deviceNormalizedName"
       :to="{
         name: 'UserDeviceDash',
-        params: { userName: userName, deviceName: deviceName }
+        params: { userName: userName, deviceName: deviceNormalizedName }
       }"
     >
       <v-icon class="hidden-md-and-up">fa-home</v-icon>
@@ -22,10 +27,13 @@
       text
       dark
       exact
-      v-if="deviceName"
+      v-if="deviceNormalizedName"
       :to="{
         name: 'UserDeviceGraphs',
-        params: { userName: userName, deviceName: deviceName }
+        params: {
+          userName: userName,
+          deviceNormalizedName: deviceNormalizedName
+        }
       }"
     >
       <v-icon class="hidden-md-and-up">fa-chart-area</v-icon>
@@ -35,10 +43,13 @@
       text
       dark
       exact
-      v-if="deviceName"
+      v-if="deviceNormalizedName"
       :to="{
         name: 'UserDeviceAnnualGraphs',
-        params: { userName: userName, deviceName: deviceName }
+        params: {
+          userName: userName,
+          deviceNormalizedName: deviceNormalizedName
+        }
       }"
     >
       <v-icon class="hidden-md-and-up">fa-chart-bar</v-icon>
@@ -60,7 +71,7 @@
           :key="id"
           :to="{
             name: 'UserDeviceDash',
-            params: { userName: userName, deviceName: item.id }
+            params: { userName: userName, deviceNormalizedName: item.id }
           }"
         >
           <v-list-item-title>{{ item.text }}</v-list-item-title>
@@ -93,7 +104,7 @@ export default {
     userName: {
       type: String
     },
-    deviceName: {
+    deviceNormalizedName: {
       type: String,
       default: ""
     }

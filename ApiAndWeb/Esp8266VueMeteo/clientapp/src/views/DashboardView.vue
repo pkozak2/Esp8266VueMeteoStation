@@ -3,7 +3,7 @@
     <Toolbar
       @toogle-drawer="drawer = !drawer"
       :userName="userName"
-      :deviceName="deviceName"
+      :deviceNormalizedName="deviceNormalizedName"
     />
 
     <!-- <Drawer v-model="drawer" /> -->
@@ -25,7 +25,7 @@ export default {
   components: { Toolbar, CFooter },
   props: {
     userName: String,
-    deviceName: String
+    deviceNormalizedName: String
   },
   data: () => ({
     drawer: false

@@ -2,7 +2,7 @@
   <v-container>
     <sensor-summary
       :userName="userName"
-      :deviceNormalizedName="deviceName"
+      :deviceNormalizedName="deviceNormalizedName"
     ></sensor-summary>
   </v-container>
 </template>
@@ -13,7 +13,7 @@ export default {
   components: { SensorSummary },
   props: {
     userName: { type: String },
-    deviceName: { type: String }
+    deviceNormalizedName: { type: String }
   },
   data: () => {
     return {};

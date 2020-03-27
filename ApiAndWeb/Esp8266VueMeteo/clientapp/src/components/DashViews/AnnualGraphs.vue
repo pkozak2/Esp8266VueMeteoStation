@@ -1,5 +1,7 @@
 <template>
-  <div>Annulal graphs for: {{ deviceName }} and user: {{ userName }}</div>
+  <div>
+    Annulal graphs for: {{ deviceNormalizedName }} and user: {{ userName }}
+  </div>
 </template>
 <script>
 export default {
@@ -9,7 +11,7 @@ export default {
       type: String,
       required: true
     },
-    deviceName: {
+    deviceNormalizedName: {
       type: String,
       required: true
     }

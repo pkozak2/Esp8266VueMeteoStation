@@ -1,4 +1,5 @@
-﻿using Esp8266VueMeteo.Services;
+﻿using Esp8266VueMeteo.Models.ApiModels;
+using Esp8266VueMeteo.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -43,12 +44,26 @@ namespace Esp8266VueMeteo.Controllers
             return Ok(device);
         }
 
-        [HttpGet("{deviceId}/averages/pollution/{days}")]
-        public IActionResult GetDevicePollutionGraphData(Guid deviceId, int days)
+        [HttpGet("{deviceId}/averages/{graphType}/{days}")]
+        public IActionResult GetDevicePollutionGraphData(Guid deviceId, GraphTypeEnum graphType, int days)
         {
-            var device = _measurementsService.AveragePollutionsForDeviceGraph(deviceId, days);
-            if (device == null) return NotFound();
-            return Ok(device);
+            if (graphType == 0) return BadRequest("Wrong graph Type!");
+            switch (graphType)
+            {
+                case GraphTypeEnum.Pollution:
+                    {
+                        var device = _measurementsService.AveragePollutionsForDeviceGraph(deviceId, days);
+                        if (device == null) return NotFound();
+                        return Ok(device);
+                    }
+                case GraphTypeEnum.Temperature:
+                    {
+                        var device = _measurementsService.AverageTemperaturesForDeviceGraph(deviceId, days);
+                        if (device == null) return NotFound();
+                        return Ok(device);
+                    }
+            }
+            return Ok();
         }
 
     }

@@ -206,19 +206,19 @@ export default [
         component: () => import("@/components/DashViews/Dashboard.vue")
       },
       {
-        path: ":deviceName",
+        path: ":deviceNormalizedName",
         name: "UserDeviceDash",
         props: true,
         component: () => import("@/components/DashViews/NewDashboard.vue")
       },
       {
-        path: ":deviceName/graphs",
+        path: ":deviceNormalizedName/graphs",
         name: "UserDeviceGraphs",
         props: true,
         component: () => import("@/components/DashViews/Graphs.vue")
       },
       {
-        path: ":deviceName/annualgraphs",
+        path: ":deviceNormalizedName/annualgraphs",
         name: "UserDeviceAnnualGraphs",
         props: true,
         component: () => import("@/components/DashViews/AnnualGraphs.vue")

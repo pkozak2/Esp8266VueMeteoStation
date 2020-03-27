@@ -1,5 +1,7 @@
 <template>
-  <div>Here will be graphs for {{ deviceName }} with {{ userName }}</div>
+  <div>
+    Here will be graphs for {{ deviceNormalizedName }} with {{ userName }}
+  </div>
 </template>
 <script>
 export default {
@@ -9,7 +11,7 @@ export default {
       type: String,
       required: true
     },
-    deviceName: {
+    deviceNormalizedName: {
       type: String,
       required: true
     }

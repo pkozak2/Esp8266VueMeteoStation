@@ -19,6 +19,7 @@ namespace Esp8266VueMeteo.Services
         DataJsonModel GetCurrentDataJson(Guid deviceId);
         IEnumerable<AverageDataModel> AverageMeasurementsForDevice(Guid deviceId, int hours);
         PollutonLevelGraphData AveragePollutionsForDeviceGraph(Guid deviceId, int days);
+        TemperatureGraphData AverageTemperaturesForDeviceGraph(Guid deviceId, int days);
     }
     public class MeasurementsService : IMeasurementsService
     {
@@ -230,6 +231,18 @@ namespace Esp8266VueMeteo.Services
 
             result.Pm25Data.AddRange(measurements.Where(w => w.Pm25 != null).Select(s => new GraphDataModel() { DateTime = s.InsertDate, Value = s.Pm25 }));
             result.Pm10Data.AddRange(measurements.Where(w => w.Pm10 != null).Select(s => new GraphDataModel() { DateTime = s.InsertDate, Value = s.Pm10 }));
+
+            return result;
+        }
+
+        public TemperatureGraphData AverageTemperaturesForDeviceGraph(Guid deviceId, int days)
+        {
+            var result = new TemperatureGraphData();
+
+            var measurements = MeasurementsForDeviceFromHours(deviceId, days * 24);
+
+            result.TemperatureData.AddRange(measurements.Where(w => w.Temperature != null).Select(s => new GraphDataModel() { DateTime = s.InsertDate, Value = s.Temperature }));
+            result.HeaterData.AddRange(measurements.Where(w => w.HeaterTemperature != null).Select(s => new GraphDataModel() { DateTime = s.InsertDate, Value = s.HeaterTemperature }));
 
             return result;
         }
