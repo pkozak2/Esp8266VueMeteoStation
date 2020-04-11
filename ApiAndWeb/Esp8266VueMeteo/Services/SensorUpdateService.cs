@@ -18,15 +18,19 @@ namespace Esp8266VueMeteo.Services
         private readonly IMeasurementsService _measurementsService;
         private readonly IJsonUpdatesService _jsonUpdatesService;
         private readonly IAqiEcoService _aqiEcoService;
+        private readonly IRecordsService _recordsService;
         private readonly IDevicesRepository _devicesRepository;
 
-        public SensorUpdateService(ILogger<SensorUpdateService> logger, IMeasurementsService measurementsService, IJsonUpdatesService jsonUpdatesService, IAqiEcoService aqiEcoService, IDevicesRepository devicesRepository )
+        public SensorUpdateService(ILogger<SensorUpdateService> logger, IMeasurementsService measurementsService,
+            IJsonUpdatesService jsonUpdatesService, IAqiEcoService aqiEcoService,
+            IDevicesRepository devicesRepository, IRecordsService recordsService)
         {
             _logger = logger;
             _measurementsService = measurementsService;
             _jsonUpdatesService = jsonUpdatesService;
             _aqiEcoService = aqiEcoService;
             _devicesRepository = devicesRepository;
+            _recordsService = recordsService;
         }
 
         public async Task<bool> UpdateSensorRecordsAsync(Guid deviceId, IList<SensorData> data, string requestString)
@@ -44,8 +48,8 @@ namespace Esp8266VueMeteo.Services
             }
 
             tasks.Add(_jsonUpdatesService.SaveUpdateAsync(deviceId, requestString));
-
             tasks.Add(_measurementsService.AddSensorMeasurementAsync(deviceId, data));
+            tasks.Add(_recordsService.AddRecordAsync(deviceId, data));
 
             var result = await Task.WhenAll(tasks);
             return result.Any(r => r == true);

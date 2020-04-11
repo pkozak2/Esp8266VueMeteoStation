@@ -32,7 +32,7 @@ namespace Esp8266VueMeteo.Services
 
         public async Task<bool> SaveUpdateAsync(Guid deviceId, string jsonUpdate)
         {
-            _repository.DeleteOldUpdates(deviceId);
+            //_repository.DeleteOldUpdates(deviceId);
             return await _repository.CreateJsonUpdateAsync(deviceId, jsonUpdate);
         }
     }
