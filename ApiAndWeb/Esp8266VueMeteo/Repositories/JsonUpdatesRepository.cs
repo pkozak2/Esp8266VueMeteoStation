@@ -4,12 +4,14 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Esp8266VueMeteo.Repositories
 {
     public interface IJsonUpdatesRepository
     {
         bool CreateJsonUpdate(Guid deviceId, string data);
+        Task<bool> CreateJsonUpdateAsync(Guid deviceId, string data);
         bool DeleteOldUpdates(Guid deviceId);
         IEnumerable<JsonUpdates> GetJsonUpdates(Guid deviceId, int top = 10);
         IEnumerable<JsonUpdates> GetJsonUpdates(Guid deviceId);
@@ -59,7 +61,7 @@ namespace Esp8266VueMeteo.Repositories
             _logger.LogInformation("Save JSON DATA");
             try
             {
-               
+
                 _context.JsonUpdates.Add(new JsonUpdates() { DeviceId = deviceId, InsertDateTime = DateTimeOffset.Now, JsonValue = data });
                 return _context.SaveChanges() > 0;
             }
@@ -70,15 +72,32 @@ namespace Esp8266VueMeteo.Repositories
             }
         }
 
+        public async Task<bool> CreateJsonUpdateAsync(Guid deviceId, string data)
+        {
+            _logger.LogInformation("Save JSON DATA");
+            try
+            {
+
+                _context.JsonUpdates.Add(new JsonUpdates() { DeviceId = deviceId, InsertDateTime = DateTimeOffset.Now, JsonValue = data });
+                return await _context.SaveChangesAsync() > 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error when Save JSON DATA");
+                return false;
+            }
+        }
+
         public bool DeleteOldUpdates(Guid deviceId)
         {
-            _logger.LogInformation($"Old data will be deleted for deviceId: {deviceId}");
             try
             {
                 if (_settings.StoreRawDataForHours == 0) return true;
-                var maxDateToDelete = DateTimeOffset.Now.AddHours(_settings.StoreRawDataForHours);
+                _logger.LogInformation($"Old data will be deleted for deviceId: {deviceId}");
+                var maxDateToDelete = DateTimeOffset.Now.AddHours(-_settings.StoreRawDataForHours);
                 var values = _context.JsonUpdates.Where(w => w.DeviceId == deviceId && w.InsertDateTime < maxDateToDelete);
                 _context.JsonUpdates.RemoveRange(values);
+                _context.SaveChanges();
                 return true;
             }
             catch (Exception ex)

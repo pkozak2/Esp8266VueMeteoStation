@@ -37,6 +37,7 @@ namespace Esp8266VueMeteo
             services.AddDbContext<MeteoDbContext>(options =>
               options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddTransient<ISensorUpdateService, SensorUpdateService>();
             services.AddTransient<IDevicesService, DevicesService>();
             services.AddTransient<IMeasurementsService, MeasurementsService>();
             services.AddTransient<IJsonUpdatesService, JsonUpdatesService>();

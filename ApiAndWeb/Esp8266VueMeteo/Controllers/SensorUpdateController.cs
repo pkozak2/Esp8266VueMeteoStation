@@ -15,15 +15,12 @@ namespace Esp8266VueMeteo.Controllers
     public class SensorUpdateController : ControllerBase
     {
         private readonly IDevicesService _devicesService;
-        private readonly IMeasurementsService _measurementsService;
-        private readonly IJsonUpdatesService _jsonUpdatesService;
-        private readonly IAqiEcoService _aqiEcoService;
-        public SensorUpdateController(IDevicesService devicesService, IMeasurementsService measurementsService, IJsonUpdatesService jsonUpdatesService, IAqiEcoService aqiEcoService)
+        private readonly ISensorUpdateService _sensorUpdateService;
+
+        public SensorUpdateController(IDevicesService devicesService, ISensorUpdateService sensorUpdateService)
         {
             _devicesService = devicesService;
-            _measurementsService = measurementsService;
-            _jsonUpdatesService = jsonUpdatesService;
-            _aqiEcoService = aqiEcoService;
+            _sensorUpdateService = sensorUpdateService;
         }
 
         [HttpGet]
@@ -66,9 +63,7 @@ namespace Esp8266VueMeteo.Controllers
             {
                 return Unauthorized("Invalid UserName/Password or Device not found!");
             }
-            _jsonUpdatesService.SaveUpdate(deviceId.Value, requestString);
-            _aqiEcoService.SendToAqi(deviceId.Value, requestString);
-            var result = _measurementsService.AddSensorMeasurement(deviceId.Value, request.DataValues);
+            var result = await _sensorUpdateService.UpdateSensorRecordsAsync(deviceId.Value, request.DataValues, requestString);
             return Ok(result);
         }
     }

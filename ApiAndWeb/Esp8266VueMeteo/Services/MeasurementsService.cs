@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Esp8266VueMeteo.Services
 {
@@ -14,6 +15,7 @@ namespace Esp8266VueMeteo.Services
     {
         List<Measurements> GetAllMeasurements();
         bool AddSensorMeasurement(Guid deviceId, IList<SensorData> data);
+        Task<bool> AddSensorMeasurementAsync(Guid deviceId, IList<SensorData> data);
         SensorMeasurementModel CurrentMeasurementsForDevice(Guid deviceId);
         List<SensorMeasurementModel> MeasurementsForDeviceFromHours(Guid deviceId, int hours);
         DataJsonModel GetCurrentDataJson(Guid deviceId);
@@ -30,6 +32,7 @@ namespace Esp8266VueMeteo.Services
             _devicesReporistory = devicesRepository;
             _measurementsRepository = measurementsRepository;
         }
+        [Obsolete]
         public bool AddSensorMeasurement(Guid deviceId, IList<SensorData> data)
         {
             var mapping = SensorTypes.ValueMapping;
@@ -53,6 +56,30 @@ namespace Esp8266VueMeteo.Services
             return _measurementsRepository.AddSensorMeasurement(deviceId, measurement.Pm25, measurement.Pm10,
                 measurement.Temperature, measurement.Humidity, measurement.Pressure, measurement.HeaterTemperature, measurement.HeaterHumidity, measurement.WifiRssi, measurement.CellVoltage);
 
+        }
+
+        public async Task<bool> AddSensorMeasurementAsync(Guid deviceId, IList<SensorData> data)
+        {
+            var mapping = SensorTypes.ValueMapping;
+            MeasurementModel measurement = new MeasurementModel();
+
+            foreach (var d in data)
+            {
+                var key = mapping.FirstOrDefault(x => x.Value.Contains(d.ValueType)).Key;
+                if (string.IsNullOrEmpty(key)) continue;
+
+                PropertyInfo propertyInfo = measurement.GetType().GetProperty(key);
+
+                if (propertyInfo != null)
+                {
+                    Type t = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
+                    var safeValue = (d.Value == null) ? null : Convert.ChangeType(d.Value.Replace(".", ","), t);
+                    propertyInfo.SetValue(measurement, safeValue, null);
+                }
+            }
+
+            return await _measurementsRepository.AddSensorMeasurementAsync(deviceId, measurement.Pm25, measurement.Pm10,
+                measurement.Temperature, measurement.Humidity, measurement.Pressure, measurement.HeaterTemperature, measurement.HeaterHumidity, measurement.WifiRssi, measurement.CellVoltage);
         }
 
         public IEnumerable<AverageDataModel> AverageMeasurementsForDevice(Guid deviceId, int hours)
@@ -246,5 +273,7 @@ namespace Esp8266VueMeteo.Services
 
             return result;
         }
+
+        
     }
 }

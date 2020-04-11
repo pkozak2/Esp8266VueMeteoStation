@@ -10,6 +10,7 @@ namespace Esp8266VueMeteo.Services
     public interface IJsonUpdatesService
     {
         void SaveUpdate(Guid deviceId, string jsonUpdate);
+        Task<bool> SaveUpdateAsync(Guid deviceId, string jsonUpdate);
     }
     public class JsonUpdatesService : IJsonUpdatesService
     {
@@ -22,10 +23,17 @@ namespace Esp8266VueMeteo.Services
             _repository = repository;
         }
 
+        [Obsolete]
         public void SaveUpdate(Guid deviceId, string jsonUpdate)
         {
             _logger.LogInformation($"save update JSON sensor: {deviceId}");
             _repository.CreateJsonUpdate(deviceId, jsonUpdate);
+        }
+
+        public async Task<bool> SaveUpdateAsync(Guid deviceId, string jsonUpdate)
+        {
+            _repository.DeleteOldUpdates(deviceId);
+            return await _repository.CreateJsonUpdateAsync(deviceId, jsonUpdate);
         }
     }
 }
