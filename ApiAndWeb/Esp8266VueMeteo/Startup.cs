@@ -35,7 +35,7 @@ namespace Esp8266VueMeteo
                 configuration.RootPath = "clientapp/dist";
             });
             services.AddDbContext<MeteoDbContext>(options =>
-              options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+              options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
 
             services.AddTransient<ISensorUpdateService, SensorUpdateService>();
             services.AddTransient<IDevicesService, DevicesService>();
