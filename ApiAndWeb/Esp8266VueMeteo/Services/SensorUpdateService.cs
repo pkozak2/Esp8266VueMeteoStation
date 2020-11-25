@@ -40,19 +40,17 @@ namespace Esp8266VueMeteo.Services
 
             if (device == null) return false;
 
-            var tasks = new List<Task<bool>>();
 
-            if(device.SendToAqiEco && !string.IsNullOrEmpty(device.AqiEcoUpdateUrl))
+            if (device.SendToAqiEco && !string.IsNullOrEmpty(device.AqiEcoUpdateUrl))
             {
-                tasks.Add(_aqiEcoService.SendToAqi(deviceId, device.AqiEcoUpdateUrl, requestString));
+                await _aqiEcoService.SendToAqi(deviceId, device.AqiEcoUpdateUrl, requestString);
             }
 
-            tasks.Add(_jsonUpdatesService.SaveUpdateAsync(deviceId, requestString));
-            tasks.Add(_measurementsService.AddSensorMeasurementAsync(deviceId, data));
-            tasks.Add(_recordsService.AddRecordAsync(deviceId, data));
+            await _jsonUpdatesService.SaveUpdateAsync(deviceId, requestString);
+            await _measurementsService.AddSensorMeasurementAsync(deviceId, data);
+            await _recordsService.AddRecordAsync(deviceId, data);
 
-            var result = await Task.WhenAll(tasks);
-            return result.Any(r => r == true);
+            return true;
         }
     }
 }
