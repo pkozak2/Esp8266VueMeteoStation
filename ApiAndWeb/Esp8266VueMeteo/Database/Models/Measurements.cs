@@ -20,6 +20,12 @@ namespace Esp8266VueMeteo.Database.Models
         public DateTimeOffset InsertDateTime { get; set; }
         public double? Pm25 { get; set; }
         public double? Pm10 { get; set; }
+        public double? Pm1 { get; set; }
+        public double? Pm4 { get; set; }
+        public double? N1 { get; set; }
+        public double? N25 { get; set; }
+        public double? N4 { get; set; }
+        public double? N10 { get; set; }
         public double? Co2 { get; set; }
         public double? Temperature { get; set; }
         public double? Humidity { get; set; }
