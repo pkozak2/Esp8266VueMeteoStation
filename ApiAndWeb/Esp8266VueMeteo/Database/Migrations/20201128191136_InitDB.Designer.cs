@@ -10,111 +10,95 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Esp8266VueMeteo.Database.Migrations
 {
     [DbContext(typeof(MeteoDbContext))]
-    [Migration("20200325152603_AddrecordModelAggregates")]
-    partial class AddrecordModelAggregates
+    [Migration("20201128191136_InitDB")]
+    partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Esp8266VueMeteo.Database.Models.Aggregates", b =>
-                {
-                    b.Property<Guid>("AggregateId")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<double?>("Co2");
-
-                    b.Property<Guid>("DeviceId");
-
-                    b.Property<double?>("HeaterHumidity");
-
-                    b.Property<double?>("HeaterTemperature");
-
-                    b.Property<double?>("Humidity");
-
-                    b.Property<DateTimeOffset>("InsertDateTime");
-
-                    b.Property<double?>("Pm10");
-
-                    b.Property<double?>("Pm25");
-
-                    b.Property<double?>("Pressure");
-
-                    b.Property<int>("Resolution");
-
-                    b.Property<double?>("Temperature");
-
-                    b.HasKey("AggregateId");
-
-                    b.HasIndex("DeviceId");
-
-                    b.ToTable("Aggregates");
-                });
 
             modelBuilder.Entity("Esp8266VueMeteo.Database.Models.Devices", b =>
                 {
                     b.Property<Guid>("DeviceId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<string>("AqiEcoUpdateUrl");
+                    b.Property<string>("AqiEcoUpdateUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
                     b.Property<string>("DeviceName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("DeviceNormalizedName")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256)
                         .HasDefaultValue("");
 
-                    b.Property<int?>("Elevation");
+                    b.Property<int?>("Elevation")
+                        .HasColumnType("int");
 
                     b.Property<string>("Esp8266Id")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ExtraDescription")
+                        .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
                     b.Property<string>("HttpPassword")
                         .IsRequired()
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("HttpUserName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<DateTimeOffset>("InsertDateTime");
+                    b.Property<DateTimeOffset>("InsertDateTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
                         .HasDefaultValue(true);
 
-                    b.Property<bool>("IsDefault");
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
 
-                    b.Property<double?>("Latitude");
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("float");
 
                     b.Property<bool>("LocationProvided")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<double?>("Longtitude");
+                    b.Property<double?>("Longtitude")
+                        .HasColumnType("float");
 
-                    b.Property<int?>("Radius");
+                    b.Property<int?>("Radius")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("SendToAqiEco");
+                    b.Property<bool>("SendToAqiEco")
+                        .HasColumnType("bit");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("DeviceId");
 
@@ -127,14 +111,18 @@ namespace Esp8266VueMeteo.Database.Migrations
                 {
                     b.Property<Guid>("JsonUpdateId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<Guid>("DeviceId");
+                    b.Property<Guid>("DeviceId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("InsertDateTime");
+                    b.Property<DateTimeOffset>("InsertDateTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("JsonValue")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)")
                         .HasMaxLength(5000);
 
                     b.HasKey("JsonUpdateId");
@@ -148,31 +136,62 @@ namespace Esp8266VueMeteo.Database.Migrations
                 {
                     b.Property<Guid>("MeasurementId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<double?>("CellVoltage");
+                    b.Property<double?>("CellVoltage")
+                        .HasColumnType("float");
 
-                    b.Property<double?>("Co2");
+                    b.Property<double?>("Co2")
+                        .HasColumnType("float");
 
-                    b.Property<Guid>("DeviceId");
+                    b.Property<Guid>("DeviceId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<double?>("HeaterHumidity");
+                    b.Property<double?>("HeaterHumidity")
+                        .HasColumnType("float");
 
-                    b.Property<double?>("HeaterTemperature");
+                    b.Property<double?>("HeaterTemperature")
+                        .HasColumnType("float");
 
-                    b.Property<double?>("Humidity");
+                    b.Property<double?>("Humidity")
+                        .HasColumnType("float");
 
-                    b.Property<DateTimeOffset>("InsertDateTime");
+                    b.Property<DateTimeOffset>("InsertDateTime")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<double?>("Pm10");
+                    b.Property<double?>("N1")
+                        .HasColumnType("float");
 
-                    b.Property<double?>("Pm25");
+                    b.Property<double?>("N10")
+                        .HasColumnType("float");
 
-                    b.Property<double?>("Pressure");
+                    b.Property<double?>("N25")
+                        .HasColumnType("float");
 
-                    b.Property<double?>("Temperature");
+                    b.Property<double?>("N4")
+                        .HasColumnType("float");
 
-                    b.Property<double?>("WifiRssi");
+                    b.Property<double?>("Pm1")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Pm10")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Pm25")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Pm4")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Pressure")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Temperature")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("WifiRssi")
+                        .HasColumnType("float");
 
                     b.HasKey("MeasurementId");
 
@@ -181,59 +200,32 @@ namespace Esp8266VueMeteo.Database.Migrations
                     b.ToTable("Measurements");
                 });
 
-            modelBuilder.Entity("Esp8266VueMeteo.Database.Models.Records", b =>
-                {
-                    b.Property<Guid>("RecordId")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<double?>("Co2");
-
-                    b.Property<Guid>("DeviceId");
-
-                    b.Property<double?>("HeaterHumidity");
-
-                    b.Property<double?>("HeaterTemperature");
-
-                    b.Property<double?>("Humidity");
-
-                    b.Property<DateTimeOffset>("InsertDateTime");
-
-                    b.Property<double?>("Pm10");
-
-                    b.Property<double?>("Pm25");
-
-                    b.Property<double?>("Pressure");
-
-                    b.Property<double?>("Temperature");
-
-                    b.HasKey("RecordId");
-
-                    b.HasIndex("DeviceId");
-
-                    b.ToTable("Records");
-                });
-
             modelBuilder.Entity("Esp8266VueMeteo.Database.Models.Users", b =>
                 {
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Email")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("InsertDate")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTime(2020, 3, 25, 16, 26, 3, 115, DateTimeKind.Local).AddTicks(6875));
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2020, 11, 28, 20, 11, 36, 100, DateTimeKind.Local).AddTicks(7860));
 
-                    b.Property<DateTime?>("LastLoginDate");
+                    b.Property<DateTime?>("LastLoginDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
                         .IsRequired()
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("UserId");
@@ -244,20 +236,13 @@ namespace Esp8266VueMeteo.Database.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Esp8266VueMeteo.Database.Models.Aggregates", b =>
-                {
-                    b.HasOne("Esp8266VueMeteo.Database.Models.Devices", "Device")
-                        .WithMany()
-                        .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("Esp8266VueMeteo.Database.Models.Devices", b =>
                 {
                     b.HasOne("Esp8266VueMeteo.Database.Models.Users", "User")
                         .WithMany("Devices")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Esp8266VueMeteo.Database.Models.JsonUpdates", b =>
@@ -265,7 +250,8 @@ namespace Esp8266VueMeteo.Database.Migrations
                     b.HasOne("Esp8266VueMeteo.Database.Models.Devices", "Device")
                         .WithMany()
                         .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Esp8266VueMeteo.Database.Models.Measurements", b =>
@@ -273,15 +259,8 @@ namespace Esp8266VueMeteo.Database.Migrations
                     b.HasOne("Esp8266VueMeteo.Database.Models.Devices", "Device")
                         .WithMany("Measurements")
                         .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Esp8266VueMeteo.Database.Models.Records", b =>
-                {
-                    b.HasOne("Esp8266VueMeteo.Database.Models.Devices", "Device")
-                        .WithMany()
-                        .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
