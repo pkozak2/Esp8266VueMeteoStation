@@ -44,8 +44,8 @@ namespace Esp8266VueMeteo.Services
                 await _aqiEcoService.SendToAqi(deviceId, device.AqiEcoUpdateUrl, requestString);
             }
 
-            await _jsonUpdatesService.SaveUpdateAsync(deviceId, requestString);
-            await _measurementsService.AddSensorMeasurementAsync(deviceId, data);
+            _jsonUpdatesService.SaveUpdate(deviceId, requestString);
+            _measurementsService.AddSensorMeasurement(deviceId, data);
 
             return true;
         }
