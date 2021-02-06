@@ -28,6 +28,7 @@ namespace Esp8266VueMeteo.Services
         {
             _logger.LogInformation($"save update JSON sensor: {deviceId}");
             _repository.CreateJsonUpdate(deviceId, jsonUpdate);
+            _repository.DeleteOldUpdates(deviceId);
         }
 
         public async Task<bool> SaveUpdateAsync(Guid deviceId, string jsonUpdate)
