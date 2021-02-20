@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Esp8266VueMeteo.Services
 {
@@ -15,7 +14,6 @@ namespace Esp8266VueMeteo.Services
     {
         List<Measurements> GetAllMeasurements();
         bool AddSensorMeasurement(Guid deviceId, IList<SensorData> data);
-        Task<bool> AddSensorMeasurementAsync(Guid deviceId, IList<SensorData> data);
         SensorMeasurementModel CurrentMeasurementsForDevice(Guid deviceId);
         List<SensorMeasurementModel> MeasurementsForDeviceFromHours(Guid deviceId, int hours);
         DataJsonModel GetCurrentDataJson(Guid deviceId);
@@ -32,33 +30,9 @@ namespace Esp8266VueMeteo.Services
             _devicesReporistory = devicesRepository;
             _measurementsRepository = measurementsRepository;
         }
-        [Obsolete]
+
+
         public bool AddSensorMeasurement(Guid deviceId, IList<SensorData> data)
-        {
-            var mapping = SensorTypes.ValueMapping;
-            MeasurementModel measurement = new MeasurementModel();
-
-            foreach (var d in data)
-            {
-                var key = mapping.FirstOrDefault(x => x.Value.Contains(d.ValueType)).Key;
-                if (string.IsNullOrEmpty(key)) continue;
-
-                PropertyInfo propertyInfo = measurement.GetType().GetProperty(key);
-
-                if (propertyInfo != null)
-                {
-                    Type t = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
-                    var safeValue = (d.Value == null) ? null : Convert.ChangeType(d.Value.Replace(".",","), t);
-                    propertyInfo.SetValue(measurement, safeValue, null);
-                }
-            }
-
-            return _measurementsRepository.AddSensorMeasurement(deviceId, measurement.Pm25, measurement.Pm10,
-                measurement.Temperature, measurement.Humidity, measurement.Pressure, measurement.HeaterTemperature, measurement.HeaterHumidity, measurement.WifiRssi, measurement.CellVoltage);
-
-        }
-
-        public async Task<bool> AddSensorMeasurementAsync(Guid deviceId, IList<SensorData> data)
         {
             var mapping = SensorTypes.ValueMapping;
             MeasurementModel measurement = new MeasurementModel();
@@ -78,8 +52,8 @@ namespace Esp8266VueMeteo.Services
                 }
             }
 
-            return await _measurementsRepository.AddSensorMeasurementAsync(deviceId, measurement.Pm25, measurement.Pm10,
-                measurement.Temperature, measurement.Humidity, measurement.Pressure, measurement.HeaterTemperature, measurement.HeaterHumidity, measurement.WifiRssi, measurement.CellVoltage);
+            return _measurementsRepository.AddSensorMeasurement(deviceId, measurement);
+
         }
 
         public IEnumerable<AverageDataModel> AverageMeasurementsForDevice(Guid deviceId, int hours)
@@ -104,7 +78,8 @@ namespace Esp8266VueMeteo.Services
                         pm10Limit = AirQualityHelper.PM10Limit1h;
                         pm25Thresholds = AirQualityHelper.PM25Thresholds1h;
                         pm10Thresholds = AirQualityHelper.PM10Thresholds1h;
-                    } else
+                    }
+                    else
                     {
                         pm25Limit = AirQualityHelper.PM25Limit24h;
                         pm10Limit = AirQualityHelper.PM10Limit24h;
@@ -141,16 +116,17 @@ namespace Esp8266VueMeteo.Services
         public SensorMeasurementModel CurrentMeasurementsForDevice(Guid deviceId)
         {
             var data = _measurementsRepository.CurrentMeasurementsForDevice(deviceId);
-            if(data == null)
+            if (data == null)
             {
                 return null;
             }
-            return new SensorMeasurementModel() {
+            return new SensorMeasurementModel()
+            {
                 CellVoltage = data.CellVoltage,
                 HeaterHumidity = data.HeaterHumidity,
                 HeaterTemperature = data.HeaterTemperature,
-                Humidity = data.Humidity, 
-                Pm10 = data.Pm10, 
+                Humidity = data.Humidity,
+                Pm10 = data.Pm10,
                 Pm25 = data.Pm25,
                 Pressure = data.Pressure,
                 Temperature = data.Temperature,
@@ -227,7 +203,7 @@ namespace Esp8266VueMeteo.Services
                 return null;
             }
             var result = new List<SensorMeasurementModel>();
-            foreach(var data in items)
+            foreach (var data in items)
             {
                 result.Add(new SensorMeasurementModel()
                 {
@@ -274,6 +250,6 @@ namespace Esp8266VueMeteo.Services
             return result;
         }
 
-        
+
     }
 }

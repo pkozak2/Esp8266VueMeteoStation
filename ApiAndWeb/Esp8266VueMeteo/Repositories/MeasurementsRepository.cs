@@ -1,17 +1,16 @@
-﻿using Esp8266VueMeteo.Database;
-using Esp8266VueMeteo.Database.Models;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Esp8266VueMeteo.Database;
+using Esp8266VueMeteo.Database.Models;
+using Esp8266VueMeteo.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Esp8266VueMeteo.Repositories
 {
     public interface IMeasurementsRepository
     {
-        bool AddSensorMeasurement(Guid deviceId, double? pm25, double? pm10, double? temperature, double? humidity, double? pressure, double? heaterTemperature, double? heaterHumidity, double? rssi, double? cellVoltage);
-        Task<bool> AddSensorMeasurementAsync(Guid deviceId, double? pm25, double? pm10, double? temperature, double? humidity, double? pressure, double? heaterTemperature, double? heaterHumidity, double? rssi, double? cellVoltage);
+        bool AddSensorMeasurement(Guid deviceId, MeasurementModel measurement);
         List<Measurements> GetAllMeasurements();
         Measurements CurrentMeasurementsForDevice(Guid deviceId);
         List<Measurements> MeasurementsForDeviceFromHours(Guid deviceId, int hours);
@@ -26,57 +25,34 @@ namespace Esp8266VueMeteo.Repositories
             _context = context;
         }
 
-        [Obsolete]
-        public bool AddSensorMeasurement(Guid deviceId, double? pm25, double? pm10, double? temperature, double? humidity, double? pressure, double? heaterTemperature, double? heaterHumidity, double? rssi, double? cellVoltage)
+        public bool AddSensorMeasurement(Guid deviceId, MeasurementModel measurement)
         {
             _logger.LogInformation($"In Add sensor measurement for device id: {deviceId}");
             try
             {
-                var measurement = new Measurements()
+                var dbMeasurement = new Measurements()
                 {
                     DeviceId = deviceId,
-                    Pm25 = pm25,
-                    Pm10 = pm10,
-                    HeaterHumidity = heaterHumidity,
-                    HeaterTemperature = heaterTemperature,
-                    Humidity = humidity,
                     InsertDateTime = DateTimeOffset.Now,
-                    Pressure = pressure,
-                    Temperature = temperature,
-                    CellVoltage = cellVoltage,
-                    WifiRssi = rssi
+                    Pm25 = measurement.Pm25,
+                    Pm10 = measurement.Pm10,
+                    Pm1 = measurement.Pm1,
+                    Pm4 = measurement.Pm4,
+                    N1 = measurement.N1,
+                    N25 = measurement.N25,
+                    N4 = measurement.N4,
+                    N10 = measurement.N10,
+                    Co2 = measurement.Co2,
+                    Temperature = measurement.Temperature,
+                    Humidity = measurement.Humidity,
+                    Pressure = measurement.Pressure,
+                    HeaterTemperature = measurement.HeaterTemperature,
+                    HeaterHumidity = measurement.HeaterHumidity,
+                    WifiRssi = measurement.WifiRssi,
+                    CellVoltage = measurement.CellVoltage,
                 };
-                //_jsonUpdatesRepository.SaveUpdate(deviceId, measurement);
-                _context.Measurements.Add(measurement);
+                _context.Measurements.Add(dbMeasurement);
                 return _context.SaveChanges() >= 1;
-            }
-            catch (Exception ex) {
-                _logger.LogError(ex, "Error when saving measurement data!");
-                return false;
-            }
-        }
-        public async Task<bool> AddSensorMeasurementAsync(Guid deviceId, double? pm25, double? pm10, double? temperature, double? humidity, double? pressure, double? heaterTemperature, double? heaterHumidity, double? rssi, double? cellVoltage)
-        {
-            _logger.LogInformation($"In Add sensor measurement for device id: {deviceId}");
-            try
-            {
-                var measurement = new Measurements()
-                {
-                    DeviceId = deviceId,
-                    Pm25 = pm25,
-                    Pm10 = pm10,
-                    HeaterHumidity = heaterHumidity,
-                    HeaterTemperature = heaterTemperature,
-                    Humidity = humidity,
-                    InsertDateTime = DateTimeOffset.Now,
-                    Pressure = pressure,
-                    Temperature = temperature,
-                    CellVoltage = cellVoltage,
-                    WifiRssi = rssi
-                };
-                //_jsonUpdatesRepository.SaveUpdate(deviceId, measurement);
-                _context.Measurements.Add(measurement);
-                return await _context.SaveChangesAsync() >= 1;
             }
             catch (Exception ex)
             {
@@ -84,7 +60,6 @@ namespace Esp8266VueMeteo.Repositories
                 return false;
             }
         }
-
 
         public Measurements CurrentMeasurementsForDevice(Guid deviceId)
         {
@@ -117,7 +92,8 @@ namespace Esp8266VueMeteo.Repositories
 
         public List<Measurements> GetAllMeasurements()
         {
-           return _context.Measurements.OrderByDescending(o => o.InsertDateTime).ToList();
+            return _context.Measurements.OrderByDescending(o => o.InsertDateTime).ToList();
         }
+
     }
 }
